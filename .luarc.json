@@ -1,0 +1,16 @@
+{
+  "Lua.workspace.checkThirdParty": false,
+  "diagnostics": {
+    "disable": [
+      "lowercase-global",
+      "trailing-space",
+      "unused-local"
+    ],
+    "globals": [
+      "vim"
+    ]
+  },
+  "runtime": {
+    "version": "LuaJIT"
+  }
+}
