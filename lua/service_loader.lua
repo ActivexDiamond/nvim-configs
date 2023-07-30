@@ -51,7 +51,7 @@ local plugins = {
 --  },
   -- { 'Issafalcon/lsp-overloads.nvim' },
   -- LANG: treesitter and language specific plugins
---[[
+---[[
   { p.treesitter,
     build = ':TSUpdate',
   },
