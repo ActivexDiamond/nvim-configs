@@ -213,7 +213,7 @@ end)
 --- prompts to install ts parsers upon opening new file types with available ones.
 M.auto_install_ts_parser = U.Service(function()
   local blacklist = {}
-
+---[=[
   vim.api.nvim_create_autocmd('FileType', {
     group = vim.api.nvim_create_augroup('auto_install_ts_parser', { clear = true }),
     callback = function(ctx)
@@ -233,6 +233,8 @@ M.auto_install_ts_parser = U.Service(function()
       end
     end
   })
+--]=]
+
 end)
 
 --- pets!

@@ -1,138 +1,88 @@
-local set_hl = function(group_name, opts)
-
-  local hl_opts = {
-    fg = opts.fg,
-    bg = opts.bg,
-    sp = opts.sp,
-
-    bold = opts.bold or false,
-    standout = opts.standout or false,
-    underline = opts.underline or false,
-    undercurl = opts.undercurl or false,
-    underdouble = opts.underdouble or false,
-    underdotted = opts.underdotted or false,
-    underdashed = opts.underdashed or false,
-    strikethrough = opts.strikethrough or false,
-    italic = opts.italic or false,
-    reverse = opts.reverse or false,
-    nocombine = opts.nocombine or false,
-  }
-
-  if opts.blend ~= nil then hl_opts.blend = clamp(opts.blend, 0, 100) end
-
-  if opts[1] ~= nil then hl_opts.link = opts[1] end
-
-  -- • blend: integer between 0 and 100
-  -- • link: name of another highlight group to link
-  -- to, see |:hi-link|.
-  -- • default: Don't override existing definition
-  -- |:hi-default|
-  -- • ctermfg: Sets foreground of cterm color
-  -- |highlight-ctermfg|
-  -- • ctermbg: Sets background of cterm color
-  -- |highlight-ctermbg|
-  -- • cterm: cterm attribute map, like
-  -- |highlight-args|. If not set, cterm attributes
-  -- will match those from the attribute map
-  -- documented above.
-
-  vim.api.nvim_set_hl(0, group_name, hl_opts)
-end
-
-local set_hls = function(hl_table)
-  for hl_group, opts in pairs(hl_table) do
-    set_hl(hl_group, opts)
-  end
-end
-
-
-local c = {}
 
 local highlights = {
---[=[
   -- TREESITTER:
   -- for more visit https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
   -- Misc
-  ['@comment']           = { fg = "#FF00FF" },
-  ['@error']             = { fg = "#FF0000" },
-  ['@none']              = { fg = "#FFFFFF" },
-  ['@preproc']           = { fg = "#FF00FF" },
-  ['@define']            = { fg = "#FF00FF" },
-  ['@operator']          = { fg = "#FFFFFF" },
+  ['@comment']           = { fg = "#FF00FF"},
+  ['@error']             = { fg = "#FF00FF"},
+  ['@none']              = { fg = "#FF00FF"},
+  ['@preproc']           = { fg = "#FF00FF"},
+  ['@define']            = fg = "#FF00FF",
+  ['@operator']          = { fg = "#FF00FF"},
   -- Punctuation
-  ['@punctuation.bracket']    = { fg = "#FFFFFF" },
-  ['@punctuation.delimiter']  = { fg = "#22FFFF", bold = true },
-  ['@punctuation.special']    = { fg = "#66FF55" },
+  ['@punctuation.bracket']    = { fg = "#FF00FF" },
+  ['@punctuation.delimiter']  = { fg = "#FF00FF" },
+  ['@punctuation.special']    = { fg = "#FF00FF" },
   -- Literals
-  ['@string']             = { fg = "#AA00AA" },
-  ['@string.regex']       = { fg = "#22FFFF" },
-  ['@string.escape']      = { fg = "#BBFFFF" },
-  ['@string.special']     = { fg = "#FFFFFF" },
-  ['character']           = { fg = "#FF6600" },
-  ['character.special']   = { fg = "#FFFFFF" },
-  ['@number']             = { fg = "#880000" },
-  ['@boolean']            = { fg = "#FFFF22", bold = true },
-  ['@float']              = { fg = "#880000", italic = true} ,
+  ['@string']             = { fg = "#FF00FF"},
+  ['@string.regex']       = { fg = "#FF00FF" },
+  ['@string.escape']      = { fg = "#FF00FF" },
+  ['@string.special']     = { fg = "#FF00FF" },
+  ['character']           = { fg = "#FF00FF" },
+  ['character.special']   = { fg = "#FF00FF" },
+  ['@number']             = { fg = "#FF00FF"},
+  ['@boolean']            = { fg = "#FF00FF" },
+  ['@float']              = { fg = "#FF00FF" },
   -- Functions
-  ['@function']           = { fg = "#FFFF22", bold = true },
-  ['@function.builtin']   = { fg = "#FF2200" },
-  ['@function.call']      = { fg = "#00FF00" },
-  ['@function.macro']     = { fg = "#FFFFFF" },
-  ['@method']             = { fg = "#00AAAA" },
-  ['@method.call']        = { fg = "#0000FF" },
-  ['@constructor']        = { fg = "#4444FF" },
-  ['@parameter']          = { fg = "#F11F1F" },
+  ['@function']           = { fg = "#FF00FF"},
+  ['@function.builtin']   = { fg = "#FF00FF" },
+  ['@function.call']      = { fg = "#FF00FF" },
+  ['@function.macro']     = { fg = "#FF00FF" },
+  ['@method']             = { fg = "#FF00FF" },
+  ['@method.call']        = { fg = "#FF00FF" },
+  ['@constructor']        = { fg = "#FF00FF" },
+  ['@parameter']          = { fg = "#FF00FF" },
   -- Keywords
-  ['@keyword']            = { fg = "#FFFF22"},
-  ['@keyword.function']   = { fg = "#FFFF22", bold = true },
-  ['@keyword.operator']   = { fg = "#AFFFF0" },
-  ['@keyword.return']     = { fg = "#4444FF", italic = true },
-  ['@conditional']        = { fg = "#00FF00" },
-  ['@repeat']             = { fg = "#A0FFAA" },
-  ['@debug']              = { fg = "#AAF00A" },
-  ['@label']              = { fg = "#AAF0F0" },
-  ['@include']            = { fg = "#000FF0" },
-  ['@exception']          = { fg = "#5F0FF0" },
+  ['@keyword']            = { fg = "#FF00FF"},
+  ['@keyword.function']   = { fg = "#FF00FF" },
+  ['@keyword.operator']   = { fg = "#FF00FF" },
+  ['@keyword.return']     = { fg = "#FF00FF" },
+  ['@conditional']        = { fg = "#FF00FF" },
+  ['@repeat']             = { fg = "#FF00FF" },
+  ['@debug']              = { fg = "#FF00FF"},
+  ['@label']              = { fg = "#FF00FF" },
+  ['@include']            = { fg = "#FF00FF"},
+  ['@exception']          = { fg = "#FF00FF" },
   -- Types
-  ['@type']               = { fg = "#FF2200" },
-  ['@type.builtin']       = { fg = "#AFFFF0" },
-  ['@type.definition']    = { fg = "#4444FF" },
-  ['@type.qualifier']     = { fg = "#00FF00" },
-  ['@storageclass']       = { fg = "#00FF00", bold = true},
-  ['@attribute']          = { fg = "#FF2200" },
-  ['@field']              = { fg = "#FFffFF", bold=true},
-  ['@property']           = { fg = "#FFffFF" },
+  ['@type']               = { fg = "#FF00FF"},
+  ['@type.builtin']       = { fg = "#FF00FF" },
+  ['@type.definition']    = { fg = "#FF00FF" },
+  ['@type.qualifier']     = { fg = "#FF00FF" },
+  ['@storageclass']       = { fg = "#FF00FF" },
+  ['@attribute']          = { fg = "#FF00FF" },
+  ['@field']              = { fg = "#FF00FF" },
+  ['@property']           = { fg = "#FF00FF" },
   -- Identifiers
-  ['@variable']           = { fg = "#FF2200" }, -- c.variable,
-  ['@variable.builtin']   = { fg = "#afffff" },
-  ['@constant']           = { fg = "#4444FF" },
-  ['@constant.builtin']   = { fg = "#00ff00" },
-  ['@constant.macro']     = { fg = "#00ff00" },
-  ['@namespace']          = { fg = "#FFffFF", bold=true},
-  ['@symbol']             = { fg = "#FFfffF", bold=true},
+  ['@variable']           = { fg = "#FF00FF"}, -- c.variable,
+  ['@variable.builtin']   = { fg = "#FF00FF" },
+  ['@constant']           = { fg = "#FF00FF"},
+  ['@constant.builtin']   = { fg = "#FF00FF" },
+  ['@constant.macro']     = { fg = "#FF00FF" },
+  ['@namespace']          = { fg = "#FF00FF" },
+  ['@symbol']             = { fg = "#FF00FF" },
   -- Text
-  ['@text']                   = { fg = "#FF2200" },
+  ['@text']                   = { fg = "#FF00FF"},
   ['@text.strong']            = { bold = true },
   ['@text.emphasis']          = { italic = true },
   ['@text.underline']         = { underline = true },
   ['@text.strike']            = { strikethrough = true },
   ['@text.title']             = { bold = true },
   ['@text.literal']           = { fg = "#FF00FF" },
-  ['@text.uri']               = { underline = true, fg = "#FF00FF" },
-  ['@text.math']              = { fg = "#00ff00" },
-  ['@text.environment']       = { fg = "#afffff" },
-  ['@text.environment.name']  = { fg = "#aaf00f" },
-  ['@text.reference']         = { fg = "#00ff00" },
-  ['@text.todo']              = { fg = "#FF00FF" },
-  ['@text.note']              = { fg = "#FF00FF" },
-  ['@text.warning']           = { fg = "#FF00FF" },
-  ['@text.danger']            = { bg = c.err, fg = "#FF00FF" },
-  ['@text.diff.add']          = { fg = "#FF00FF" },
-  ['@text.diff.delete']       = { fg = "#FF00FF" },
+  ['@text.uri']               = { underline = true, fg = "#FF00FF"},
+  ['@text.math']              = { fg = "#FF00FF" },
+  ['@text.environment']       = { fg = "#FF00FF" },
+  ['@text.environment.name']  = { fg = "#FF00FF" },
+  ['@text.reference']         = { fg = "#FF00FF" },
+  ['@text.todo']              = { fg = "#FF00FF"},
+  ['@text.note']              = { fg = "#FF00FF"},
+  ['@text.warning']           = { fg = "#FF00FF"},
+  ['@text.danger']            = { bg = c.err, fg = "#FF00FF"},
+  ['@text.diff.add']          = { fg = "#FF00FF"},
+  ['@text.diff.delete']       = { fg = "#FF00FF"},
   -- Tags
-  ['@tag']                = { fg = "#FF2222" },
-  ['@tag.attribute']      = { fg = "#FF2222" },
-  ['@tag.delimiter']      = { fg = "#00ff00" },
+  ['@tag']                = { fg = "#FF00FF" },
+  ['@tag.attribute']      = { fg = "#FF00FF" },
+  ['@tag.delimiter']      = { fg = "#FF00FF" },
 
   -- Conceal
   -- ['@conceal']         = {},
@@ -172,13 +122,13 @@ local highlights = {
   CursorLineFold  = { 'CursorLine' },
   CursorLineNr    = { 'CursorLine' },
   CursorLineSign  = { 'CursorLine' },
-  DiffAdd         = { fg = "#FF00FF" },
-  DiffChange      = { fg = "#FF00FF" },
-  DiffDelete      = { fg = "#FF00FF" },
-  DiffText        = { fg = "#FF00FF" },
+  DiffAdd         = { fg = "#FF00FF"},
+  DiffChange      = { fg = "#FF00FF"},
+  DiffDelete      = { fg = "#FF00FF"},
+  DiffText        = { fg = "#FF00FF"},
   Directory       = { }, --
   EndOfBuffer     = { }, --
-  ErrorMsg        = { fg = "#FF00FF" },
+  ErrorMsg        = { fg = "#FF00FF"},
   FoldColumn      = { }, --
   Folded          = { fg = "#FF00FF", bold = true },
   lCursor         = { }, --
@@ -188,23 +138,23 @@ local highlights = {
   LineNrBelow     = { }, --
   MatchParen      = { bold = true },
   ModeMsg         = { fg = "#FF00FF", bold = true },
-  MoreMsg         = { fg = "#FF00FF" },
-  MsgArea         = { fg = "#FF00FF" },
-  MsgSeparator    = { bg = c.bg_float, fg = "#FF00FF" },
+  MoreMsg         = { fg = "#FF00FF"},
+  MsgArea         = { fg = "#FF00FF"},
+  MsgSeparator    = { bg = c.bg_float, fg = "#FF00FF"},
   NonText         = { fg = "#FF00FF", bold = true },
   Normal          = { bg = c.bg },
   NormalFloat     = { bg = c.bg_float },
-  FloatBorder     = { bg = c.bg_float, fg = "#FF00FF" },
+  FloatBorder     = { bg = c.bg_float, fg = "#FF00FF"},
   NormalNC        = { }, --
-  Pmenu           = { bg = c.line, fg = "#FF00FF" },
-  PmenuSel        = { bg = c.mg, fg = "#FF00FF" },
+  Pmenu           = { bg = c.line, fg = "#FF00FF"},
+  PmenuSel        = { bg = c.mg, fg = "#FF00FF"},
   PmenuSbar       = { 'Pmenu' },
   PmenuThumb      = { bg = c.mg },
   Question        = { fg = "#FF00FF", bold = true },
   QuickFixLine    = { 'PmenuSel' },
   Search          = { bg = c.mg, bold = true },
   SignColumn      = { }, --
-  SpecialKey      = { fg = "#FF00FF" },
+  SpecialKey      = { fg = "#FF00FF"},
   SpellBad        = { undercurl = true, sp = c.err },
   SpellCap        = { }, --
   SpellLocal      = { }, --
@@ -214,19 +164,19 @@ local highlights = {
   StatusLineNC    = { reverse = true },
   Substitute      = { 'CurSearch' },
   TabLineFill     = { bg = c.bg_float },
-  TabLine         = { 'TablineFill', fg = "#FF00FF" },
+  TabLine         = { 'TablineFill', fg = "#FF00FF"},
   TabLineSel      = { 'TablineFill', fg = "#FF00FF", bold = true },
   TermCursor      = { underline = true },
   TermCursorNC    = { 'TermCursor' },
   Title           = { fg = "#FF00FF" },
   Visual          = { bg = c.fold, bold = true },
   VisualNOS       = { }, --
-  WarningMsg      = { fg = "#FF00FF" },
+  WarningMsg      = { fg = "#FF00FF"},
 Whitespace      = { 'Debug' },
   WildMenu        = { 'Pmenu' },
   WinBar          = { 'NormalFloat' },
   WinBarNC        = { }, --
-  WinSeparator    = { fg = "#FF00FF" },
+  WinSeparator    = { fg = "#FF00FF"},
 
   -- DEPRECATED
   VertSplit       = { 'WinSeparator' },
@@ -243,10 +193,10 @@ LspCodeLensSeparator        = { fg = "#FF00FF" },
 
 
   -- Diagnostics
-  DiagnosticError             = { fg = "#FF00FF" },
-  DiagnosticWarn              = { fg = "#FF00FF" },
-  DiagnosticInfo              = { fg = "#FF00FF" },
-  DiagnosticHint              = { fg = "#FF00FF" },
+  DiagnosticError             = { fg = "#FF00FF"},
+  DiagnosticWarn              = { fg = "#FF00FF"},
+  DiagnosticInfo              = { fg = "#FF00FF"},
+  DiagnosticHint              = { fg = "#FF00FF"},
   DiagnosticVirtualTextError  = { 'DiagnosticError' },
   DiagnosticVirtualTextWarn   = { 'DiagnosticWarn' },
   DiagnosticVirtualTextInfo   = { 'DiagnosticInfo' },
@@ -267,41 +217,41 @@ LspCodeLensSeparator        = { fg = "#FF00FF" },
 
   -- Vim
   -- those are no longer used for syntax highlighting, they server as fallbacks for plugins
-  Comment                 = { fg = "#FFFFFF" },
-  Constant                = { fg = "#FFFFFF" },
-  String                  = { fg = "#FFFFFF" },
-  Character               = { fg = "#FFFFFF" },
-  Number                  = { fg = "#FFFFFF" },
-  Boolean                 = { fg = "#FFFFFF" },
-  Float                   = { fg = "#FFFFFF" },
-  Identifier              = { fg = "#FFFFFF" },
-  Function                = { fg = "#FFFFFF" },
-  Statement               = { fg = "#FFFFFF" },
-  Keyword                 = { fg = "#FFFFFF" },
-  Conditional             = { fg = "#FFFFFF" },
-  Repeat                  = { fg = "#FFFFFF" },
-  Label                   = { fg = "#FFFFFF" },
-  Operator                = { fg = "#FFFFFF" },
-  Exception               = { fg = "#FFFFFF" },
-  Include                 = { fg = "#FFFFFF" },
-  PreProc                 = { fg = "#FFFFFF" },
-  Macro                   = { fg = "#FFFFFF" },
-  PreCondit               = { fg = "#FFFFFF" },
-  Define                  = { fg = "#FFFFFF" },
-  Type                    = { fg = "#FFFFFF" },
-  StorageClass            = { fg = "#FFFFFF" },
-  Structure               = { fg = "#FFFFFF" },
-  Typedef                 = { fg = "#FFFFFF" },
-  Special                 = { fg = "#FFFFFF" },
-  SpecialChar             = { fg = "#FFFFFF" },
-  Tag                     = { fg = "#FFFFFF" },
-  Delimiter               = { fg = "#FFFFFF" },
-  SpecialComment          = { fg = "#FFFFFF" },
-  Debug                   = { fg = "#FFFFFF" },
-  Underlined              = { fg = "#FFFFFF" },
-  Error                   = { fg = "#FFFFFF" },
-  Ignore                  = { fg = "#FFFFFF" };
-  Todo                    = { fg = "#FFFFFF" },
+  Comment                 = { fg = "#FF00FF" },
+  Constant                = { fg = "#FF00FF" },
+  String                  = { fg = "#FF00FF" },
+  Character               = { fg = "#FF00FF" },
+  Number                  = { fg = "#FF00FF" },
+  Boolean                 = { fg = "#FF00FF" },
+  Float                   = { fg = "#FF00FF" },
+  Identifier              = { fg = "#FF00FF" },
+  Function                = { fg = "#FF00FF" },
+  Statement               = { fg = "#FF00FF" },
+  Keyword                 = { fg = "#FF00FF" },
+  Conditional             = { fg = "#FF00FF" },
+  Repeat                  = { fg = "#FF00FF" },
+  Label                   = { fg = "#FF00FF" },
+  Operator                = { fg = "#FF00FF" },
+  Exception               = { fg = "#FF00FF" },
+  Include                 = { fg = "#FF00FF" },
+  PreProc                 = { fg = "#FF00FF" },
+  Macro                   = { fg = "#FF00FF" },
+  PreCondit               = { fg = "#FF00FF" },
+  Define                  = { fg = "#FF00FF" },
+  Type                    = { fg = "#FF00FF" },
+  StorageClass            = { fg = "#FF00FF" },
+  Structure               = { fg = "#FF00FF" },
+  Typedef                 = { fg = "#FF00FF" },
+  Special                 = { fg = "#FF00FF" },
+  SpecialChar             = { fg = "#FF00FF" },
+  Tag                     = { fg = "#FF00FF" },
+  Delimiter               = { fg = "#FF00FF" },
+  SpecialComment          = { fg = "#FF00FF" },
+  Debug                   = { fg = "#FF00FF" },
+  Underlined              = { fg = "#FF00FF" },
+  Error                   = { fg = "#FF00FF" },
+  Ignore                  = { fg = "#FF00FF"};
+  Todo                    = { fg = "#FF00FF" },
 
 
   -- TS Filetype Specific
@@ -320,93 +270,93 @@ healthBar               = { fg = "#FF00FF" };
   LspInfoBorder           = { 'FloatBorder' };
 
   -- diff
-  diffAdded               = { fg = "#FF00FF" };
-  diffChanged             = { fg = "#FF00FF" };
-  diffRemoved             = { fg = "#FF00FF" };
+  diffAdded               = { fg = "#FF00FF"};
+  diffChanged             = { fg = "#FF00FF"};
+  diffRemoved             = { fg = "#FF00FF"};
   diffOldFile             = { bg = c.del };
   diffNewFile             = { bg = c.add };
-  diffFile                = { fg = "#FF00FF" };
-  diffLine                = { fg = "#FF00FF" };
-  diffIndexLine           = { fg = "#FF00FF" };
+  diffFile                = { fg = "#FF00FF"};
+  diffLine                = { fg = "#FF00FF"};
+  diffIndexLine           = { fg = "#FF00FF"};
 
   -- gitsigns
-  GitSignsAdd             = { fg = "#FF00FF" };
-  GitSignsAddNr           = { fg = "#FF00FF" };
-  GitSignsAddLn           = { fg = "#FF00FF" };
-  GitSignsChange          = { fg = "#FF00FF" };
-  GitSignsChangeNr        = { fg = "#FF00FF" };
-  GitSignsChangeLn        = { fg = "#FF00FF" };
-  GitSignsDelete          = { fg = "#FF00FF" };
-  GitSignsDeleteNr        = { fg = "#FF00FF" };
-  GitSignsDeleteLn        = { fg = "#FF00FF" };
+  GitSignsAdd             = { fg = "#FF00FF"};
+  GitSignsAddNr           = { fg = "#FF00FF"};
+  GitSignsAddLn           = { fg = "#FF00FF"};
+  GitSignsChange          = { fg = "#FF00FF"};
+  GitSignsChangeNr        = { fg = "#FF00FF"};
+  GitSignsChangeLn        = { fg = "#FF00FF"};
+  GitSignsDelete          = { fg = "#FF00FF"};
+  GitSignsDeleteNr        = { fg = "#FF00FF"};
+  GitSignsDeleteLn        = { fg = "#FF00FF"};
 
   -- cmp
-  CmpItemAbbr             = { fg = "#FF00FF" };
+  CmpItemAbbr             = { fg = "#FF00FF"};
   CmpItemAbbrDeprecated   = { fg = "#FF00FF", strikethrough = true };
   CmpItemAbbrMatch        = { fg = "#FF00FF", bold = true };
-  CmpItemAbbrMatchFuzzy   = { fg = "#FF00FF" };
+  CmpItemAbbrMatchFuzzy   = { fg = "#FF00FF"};
   CmpItemKind             = { };
-  CmpItemMenu             = { fg = "#FF00FF" };
-  CmpItemKindText         = { fg = "#FF00FF" };
-  CmpItemKindMethod       = { fg = "#FF00FF" };
-  CmpItemKindFunction     = { fg = "#FF00FF" };
-  CmpItemKindConstructor  = { fg = "#FF00FF" };
-  CmpItemKindField        = { fg = "#FF00FF" };
-  CmpItemKindVariable     = { fg = "#FF00FF" };
-  CmpItemKindClass        = { fg = "#FF00FF" };
-  CmpItemKindInterface    = { fg = "#FF00FF" };
-  CmpItemKindModule       = { fg = "#FF00FF" };
-  CmpItemKindProperty     = { fg = "#FF00FF" };
-  CmpItemKindUnit         = { fg = "#FF00FF" };
-  CmpItemKindValue        = { fg = "#FF00FF" };
-  CmpItemKindEnum         = { fg = "#FF00FF" };
-  CmpItemKindKeyword      = { fg = "#FF00FF" };
-  CmpItemKindSnippet      = { fg = "#FF00FF" };
-  CmpItemKindColor        = { fg = "#FF00FF" };
-  CmpItemKindFile         = { fg = "#FF00FF" };
-  CmpItemKindReference    = { fg = "#FF00FF" };
-  CmpItemKindFolder       = { fg = "#FF00FF" };
-  CmpItemKindEnumMember   = { fg = "#FF00FF" };
-  CmpItemKindConstant     = { fg = "#FF00FF" };
-  CmpItemKindStruct       = { fg = "#FF00FF" };
-  CmpItemKindEvent        = { fg = "#FF00FF" };
-  CmpItemKindOperator     = { fg = "#FF00FF" };
-  CmpItemKindTypeParameter= { fg = "#FF00FF" };
+  CmpItemMenu             = { fg = "#FF00FF"};
+  CmpItemKindText         = { fg = "#FF00FF"};
+  CmpItemKindMethod       = { fg = "#FF00FF"};
+  CmpItemKindFunction     = { fg = "#FF00FF"};
+  CmpItemKindConstructor  = { fg = "#FF00FF"};
+  CmpItemKindField        = { fg = "#FF00FF"};
+  CmpItemKindVariable     = { fg = "#FF00FF"};
+  CmpItemKindClass        = { fg = "#FF00FF"};
+  CmpItemKindInterface    = { fg = "#FF00FF"};
+  CmpItemKindModule       = { fg = "#FF00FF"};
+  CmpItemKindProperty     = { fg = "#FF00FF"};
+  CmpItemKindUnit         = { fg = "#FF00FF"};
+  CmpItemKindValue        = { fg = "#FF00FF"};
+  CmpItemKindEnum         = { fg = "#FF00FF"};
+  CmpItemKindKeyword      = { fg = "#FF00FF"};
+  CmpItemKindSnippet      = { fg = "#FF00FF"};
+  CmpItemKindColor        = { fg = "#FF00FF"};
+  CmpItemKindFile         = { fg = "#FF00FF"};
+  CmpItemKindReference    = { fg = "#FF00FF"};
+  CmpItemKindFolder       = { fg = "#FF00FF"};
+  CmpItemKindEnumMember   = { fg = "#FF00FF"};
+  CmpItemKindConstant     = { fg = "#FF00FF"};
+  CmpItemKindStruct       = { fg = "#FF00FF"};
+  CmpItemKindEvent        = { fg = "#FF00FF"};
+  CmpItemKindOperator     = { fg = "#FF00FF"};
+  CmpItemKindTypeParameter= { fg = "#FF00FF"};
 
   -- scrollview
   ScrollView              = { bg = c.mg };
 
   -- scrollbar
   ScrollbarHandle         = { 'ScrollView' };
-  ScrollbarSearchHandle   = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarSearch         = { fg = "#FF00FF" };
-  ScrollbarErrorHandle    = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarError          = { fg = "#FF00FF" };
-  ScrollbarWarnHandle     = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarWarn           = { fg = "#FF00FF" };
-  ScrollbarInfoHandle     = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarInfo           = { fg = "#FF00FF" };
-  ScrollbarHintHandle     = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarHint           = { fg = "#FF00FF" };
-  ScrollbarMiscHandle     = { bg = c.mg, fg = "#FF00FF" };
-  ScrollbarMisc           = { fg = "#FF00FF" };
+  ScrollbarSearchHandle   = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarSearch         = { fg = "#FF00FF"};
+  ScrollbarErrorHandle    = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarError          = { fg = "#FF00FF"};
+  ScrollbarWarnHandle     = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarWarn           = { fg = "#FF00FF"};
+  ScrollbarInfoHandle     = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarInfo           = { fg = "#FF00FF"};
+  ScrollbarHintHandle     = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarHint           = { fg = "#FF00FF"};
+  ScrollbarMiscHandle     = { bg = c.mg, fg = "#FF00FF"};
+  ScrollbarMisc           = { fg = "#FF00FF"};
 
   -- nvim-tree
   -- NvimTreeNormal          = { bg = c.bg_alt };
-  NvimTreeRootFolder      = { fg = "#FF00FF" };
-  NvimTreeFolderIcon      = { fg = "#FF00FF" };
-  NvimTreeFileIcon        = { fg = "#FF00FF" };
-  NvimTreeSpecialFile     = { fg = "#FF00FF" };
+  NvimTreeRootFolder      = { fg = "#FF00FF"};
+  NvimTreeFolderIcon      = { fg = "#FF00FF"};
+  NvimTreeFileIcon        = { fg = "#FF00FF"};
+  NvimTreeSpecialFile     = { fg = "#FF00FF"};
   NvimTreeExecFile        = { bold = true };
   NvimTreeSymlink         = { underline = true };
-  NvimTreeIndentMarker    = { fg = "#FF00FF" };
-  NvimTreeImageFile       = { fg = "#FF00FF" };
-  NvimTreeOpenedFile      = { fg = "#FF00FF" };
-  NvimTreeGitDirty        = { fg = "#FF00FF" };
-  NvimTreeGitStaged       = { fg = "#FF00FF" };
-  NvimTreeGitMerge        = { fg = "#FF00FF" };
-  NvimTreeGitRenamed      = { fg = "#FF00FF" };
-  NvimTreeGitDeleted      = { fg = "#FF00FF" };
+  NvimTreeIndentMarker    = { fg = "#FF00FF"};
+  NvimTreeImageFile       = { fg = "#FF00FF"};
+  NvimTreeOpenedFile      = { fg = "#FF00FF"};
+  NvimTreeGitDirty        = { fg = "#FF00FF"};
+  NvimTreeGitStaged       = { fg = "#FF00FF"};
+  NvimTreeGitMerge        = { fg = "#FF00FF"};
+  NvimTreeGitRenamed      = { fg = "#FF00FF"};
+  NvimTreeGitDeleted      = { fg = "#FF00FF"};
   NvimTreeLspDiagnosticsError       = { 'DiagnosticSignError' };
   NvimTreeLspDiagnosticsWarning     = { 'DiagnosticSignWarn' };
   NvimTreeLspDiagnosticsInformation = { 'DiagnosticSignInfo' };
@@ -429,10 +379,10 @@ healthBar               = { fg = "#FF00FF" };
   NeoTreeGitAdded             = { 'NvimTreeGit' };
   NeoTreeGitConflict          = { 'NvimTreeGitMerge' };
   NeoTreeGitDeleted           = { 'NvimTreeGitDeleted' };
-  NeoTreeGitIgnored           = { fg = "#FF00FF" };
+  NeoTreeGitIgnored           = { fg = "#FF00FF"};
   NeoTreeGitModified          = { 'NeoTreeModified' };
-  NeoTreeGitUnstaged          = { fg = "#FF00FF" };
-  NeoTreeGitUntracked         = { fg = "#FF00FF" };
+  NeoTreeGitUnstaged          = { fg = "#FF00FF"};
+  NeoTreeGitUntracked         = { fg = "#FF00FF"};
   NeoTreeGitStaged            = { 'NvimTreeGitStaged' };
   NeoTreeHiddenByName         = { 'Comment' };
   NeoTreeIndentMarker         = { 'NvimTreeIndentMarker' };
@@ -455,27 +405,27 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   NeoTreeTabSeparatorInactive = { 'Ignore' };
 
   -- vim-quickui
-  QuickBG                 = { bg = c.bg_float, fg = "#FF00FF" };
+  QuickBG                 = { bg = c.bg_float, fg = "#FF00FF"};
   QuickSel                = { 'Search' };
-  QuickKey                = { fg = "#FF00FF" };
-  QuickOff                = { fg = "#FF00FF" };
+  QuickKey                = { fg = "#FF00FF"};
+  QuickOff                = { fg = "#FF00FF"};
   QuickHelp               = { 'WarningMsg' };
 
   -- outline
   FocusedSymbol           = { 'Search' };
-  SymbolsOutlineConnector = { fg = "#FF00FF" };
+  SymbolsOutlineConnector = { fg = "#FF00FF"};
 
   -- telescope
   TelescopeBorder         = { 'FloatBorder' };
   TelescopeMatching       = { fg = "#FF00FF", bold = true };
   TelescopeSelectionCaret = { fg = "#FF00FF", bold = true },
-  TelescopeNormal         = { bg = c.bg_float, fg = "#FF00FF" },
+  TelescopeNormal         = { bg = c.bg_float, fg = "#FF00FF"},
   TelescopeSelection      = { 'CursorLine' },
   TelescopeMultiSelection = { 'Type' },
-  TelescopeTitle          = { fg = "#FF00FF" };
-  TelescopePreviewTitle   = { fg = "#FF00FF" },
+  TelescopeTitle          = { fg = "#FF00FF"};
+  TelescopePreviewTitle   = { fg = "#FF00FF"},
   TelescopePreviewNormal  = { },
-  TelescopePromptTitle    = { fg = "#FF00FF" },
+  TelescopePromptTitle    = { fg = "#FF00FF"},
   TelescopePromptNormal   = { },
   TelescopePromptBorder   = { 'FloatBorder' },
 
@@ -486,11 +436,11 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   StartupTimeStartupKey   = { bold = true };
   StartupTimeStartupValue = { bold = true };
   StartupTimeHeader       = { 'Comment' };
-  StartupTimeSourcingEvent= { fg = "#FF00FF" };
-  StartupTimeOtherEvent   = { fg = "#FF00FF" };
-  StartupTimeTime         = { fg = "#FF00FF" };
-  StartupTimePercent      = { fg = "#FF00FF" };
-  StartupTimePlot         = { fg = "#FF00FF" };
+  StartupTimeSourcingEvent= { fg = "#FF00FF"};
+  StartupTimeOtherEvent   = { fg = "#FF00FF"};
+  StartupTimeTime         = { fg = "#FF00FF"};
+  StartupTimePercent      = { fg = "#FF00FF"};
+  StartupTimePlot         = { fg = "#FF00FF"};
 
   -- notify
   NotifyERRORBorder       = { 'DiagnosticVirtualTextError' };
@@ -498,11 +448,11 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   NotifyINFOBorder        = { 'DiagnosticVirtualTextInfo' };
   NotifyTRACEBorder       = { 'DiagnosticFloatingHint' };
   NotifyDEBUGBorder       = { 'DiagnosticVirtualTextHint' };
-  NotifyERRORIcon         = { fg = "#FF00FF" };
-  NotifyWARNIcon          = { fg = "#FF00FF" };
-  NotifyINFOIcon          = { fg = "#FF00FF" };
-  NotifyDEBUGIcon         = { fg = "#FF00FF" };
-  NotifyTRACEIcon         = { fg = "#FF00FF" };
+  NotifyERRORIcon         = { fg = "#FF00FF"};
+  NotifyWARNIcon          = { fg = "#FF00FF"};
+  NotifyINFOIcon          = { fg = "#FF00FF"};
+  NotifyDEBUGIcon         = { fg = "#FF00FF"};
+  NotifyTRACEIcon         = { fg = "#FF00FF"};
   NotifyERRORTitle        = { 'NotifyERRORBorder', bold = true};
   NotifyWARNTitle         = { 'NotifyWARNBorder',  bold = true};
   NotifyINFOTitle         = { 'NotifyINFOBorder',  bold = true};
@@ -515,11 +465,11 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   NotifyTRACEBody         = { 'Normal' };
 
   -- ultest
-  UltestPass              = { fg = "#FF00FF" };
-  UltestFail              = { fg = "#FF00FF" };
-  UltestRunning           = { fg = "#FF00FF" };
+  UltestPass              = { fg = "#FF00FF"};
+  UltestFail              = { fg = "#FF00FF"};
+  UltestRunning           = { fg = "#FF00FF"};
   UltestBorder            = { 'FloatBorder' };
-  UltestSummaryInfo       = { fg = "#FF00FF" };
+  UltestSummaryInfo       = { fg = "#FF00FF"};
   UltestSummaryFile       = { 'UltestSummaryInfo', bold = true};
   UltestSummaryNamespace  = { 'UltestSummaryFile' };
 
@@ -530,7 +480,7 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   ReachHandleBuffer       = { 'String' };
   ReachHandleDelete       = { 'Error' };
   ReachHandleSplit        = { 'Directory' };
-  ReachTail               = { fg = "#FF00FF" };
+  ReachTail               = { fg = "#FF00FF"};
   ReachHandleMarkLocal    = { 'Type' };
   ReachHandleMarkGlobal   = { 'Number' };
   ReachMark               = { 'Normal' };
@@ -594,13 +544,13 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
 
 
   -- CUTSOM GROUPS
-  -- DebugFg                 = { fg = "#FF00FF" };
+  -- DebugFg                 = { fg = "#FF00FF"};
   -- DebugBg                 = { bg = debug[1] };
-  -- DebugAll                = { bg = debug[1], fg = "#FF00FF" };
+  -- DebugAll                = { bg = debug[1], fg = "#FF00FF"};
   -- NormalAlt               = { bg = c.bg_alt };
   SnippetPassiveIndicator = { 'Comment' };
-  SnippetInsertIndicator  = { fg = "#FF00FF" };
-  SnippetChoiceIndicator  = { fg = "#FF00FF" };
+  SnippetInsertIndicator  = { fg = "#FF00FF"};
+  SnippetChoiceIndicator  = { fg = "#FF00FF"};
   -- CursorLineSelect        = { fg = "#FF00FF", bg = c.line, bold = true },
   Camel                   = { 'WarningMsg' };
 
@@ -610,20 +560,28 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   ModeControl             = { fg = "#FF00FF", bold = true };
   ModeSelect              = { fg = "#FF00FF", bold = true };
   ModeTerminal            = { fg = "#FF00FF", bold = true };
---]=]
 }
 
-function randomize()
-  for k, v in pairs(highlights) do
-      local r = math.random(0, 255)
-      local g = math.random(0, 255)
-      local b = math.random(0, 255)
-      local rgb = (r * 0x10000) + (g * 0x100) + b
-      v.fg = string.format("#%06x", rgb)
-  end
-end
+--[=[
+ vim.cmd [[
+   augroup misc_highlighs
+   au!
 
---randomize()
+   autocmd BufEnter log,*.log call SetLogHighlights()
+   function SetLogHighlights()
+     syn region logHead start=/^\[/ end=/\]/ contains=logInfo,logWarn,logError
 
+     syn keyword logInfo INFO
+     syn keyword logWarn WARN START
+     syn keyword logError ERROR
 
+     hi link logInfo DiagnosticInfo
+     hi link logWarn DiagnosticWarn
+     hi link logError DiagnosticError
+
+     hi link logHead Comment
+   endfunction
+   augroup misc_highlighs
+ ]]
+--]=]
 set_hls(highlights)

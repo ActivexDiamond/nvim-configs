@@ -28,7 +28,7 @@ M.ts_parsers_ensure_installed = {
   'json',
   'jsonc',
   'latex',
---  'lua',
+  'lua',
   'make',
   'markdown',
   'meson',

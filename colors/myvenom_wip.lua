@@ -49,7 +49,6 @@ end
 local c = {}
 
 local highlights = {
---[=[
   -- TREESITTER:
   -- for more visit https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
   -- Misc
@@ -610,7 +609,6 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   ModeControl             = { fg = "#FF00FF", bold = true };
   ModeSelect              = { fg = "#FF00FF", bold = true };
   ModeTerminal            = { fg = "#FF00FF", bold = true };
---]=]
 }
 
 function randomize()
@@ -624,6 +622,5 @@ function randomize()
 end
 
 --randomize()
-
 
 set_hls(highlights)

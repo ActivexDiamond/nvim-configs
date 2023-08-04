@@ -49,7 +49,6 @@ end
 local c = {}
 
 local highlights = {
---[=[
   -- TREESITTER:
   -- for more visit https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
   -- Misc
@@ -75,7 +74,7 @@ local highlights = {
   ['@float']              = { fg = "#880000", italic = true} ,
   -- Functions
   ['@function']           = { fg = "#FFFF22", bold = true },
-  ['@function.builtin']   = { fg = "#FF2200" },
+  ['@function.builtin']   = { fg = "#FF2200" , italic = true},
   ['@function.call']      = { fg = "#00FF00" },
   ['@function.macro']     = { fg = "#FFFFFF" },
   ['@method']             = { fg = "#00AAAA" },
@@ -86,11 +85,11 @@ local highlights = {
   ['@keyword']            = { fg = "#FFFF22"},
   ['@keyword.function']   = { fg = "#FFFF22", bold = true },
   ['@keyword.operator']   = { fg = "#AFFFF0" },
-  ['@keyword.return']     = { fg = "#4444FF", italic = true },
-  ['@conditional']        = { fg = "#00FF00" },
-  ['@repeat']             = { fg = "#A0FFAA" },
+  ['@keyword.return']     = { fg = "#4444FF" },
+  ['@conditional']        = { fg = "#63CC00" },
+  ['@repeat']             = { fg = "#FF6600" },
   ['@debug']              = { fg = "#AAF00A" },
-  ['@label']              = { fg = "#AAF0F0" },
+  ['@label']              = { fg = "#FF6600", bold = true},
   ['@include']            = { fg = "#000FF0" },
   ['@exception']          = { fg = "#5F0FF0" },
   -- Types
@@ -103,8 +102,8 @@ local highlights = {
   ['@field']              = { fg = "#FFffFF", bold=true},
   ['@property']           = { fg = "#FFffFF" },
   -- Identifiers
-  ['@variable']           = { fg = "#FF2200" }, -- c.variable,
-  ['@variable.builtin']   = { fg = "#afffff" },
+  --['@variable']           = { fg = "#FF2200" , underline=true}, -- c.variable,
+  ['@variable.builtin']   = { fg = "#ff0000" },
   ['@constant']           = { fg = "#4444FF" },
   ['@constant.builtin']   = { fg = "#00ff00" },
   ['@constant.macro']     = { fg = "#00ff00" },
@@ -267,6 +266,7 @@ LspCodeLensSeparator        = { fg = "#FF00FF" },
 
   -- Vim
   -- those are no longer used for syntax highlighting, they server as fallbacks for plugins
+--[[
   Comment                 = { fg = "#FFFFFF" },
   Constant                = { fg = "#FFFFFF" },
   String                  = { fg = "#FFFFFF" },
@@ -302,7 +302,7 @@ LspCodeLensSeparator        = { fg = "#FF00FF" },
   Error                   = { fg = "#FFFFFF" },
   Ignore                  = { fg = "#FFFFFF" };
   Todo                    = { fg = "#FFFFFF" },
-
+--]]
 
   -- TS Filetype Specific
   healthSuccess           = { fg = "#FF00FF", bold = true };
@@ -610,7 +610,6 @@ NeoTreeWindowsHidden        = { fg = "#FF00FF" };
   ModeControl             = { fg = "#FF00FF", bold = true };
   ModeSelect              = { fg = "#FF00FF", bold = true };
   ModeTerminal            = { fg = "#FF00FF", bold = true };
---]=]
 }
 
 function randomize()
@@ -624,6 +623,5 @@ function randomize()
 end
 
 --randomize()
-
 
 set_hls(highlights)

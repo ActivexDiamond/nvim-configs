@@ -5,7 +5,7 @@
 -- vim.g.did_load_filetypes = 0
 -- vim.g.do_filetype_lua   = 1
 
-vim.cmd.colorscheme 'venom'
+vim.cmd.colorscheme 'venom_minimal'
 
 --lua stuff
 vim.o.completeopt = "menu,menuone"
@@ -109,7 +109,7 @@ vim.diagnostic.config {
     --   local msg = diag.message
     --   local src = diag.source
     --   local code = diag.user_data.lsp.code
-    --   local icon = venom.icons.diagnostic_states[venom.severity_names[diag.severity]]
+    --   local icon =  venom.icons.diagnostic_states[venom.severity_names[diag.severity]]
     --
     --   -- remove dots
     --   msg = msg:gsub('%.', '')

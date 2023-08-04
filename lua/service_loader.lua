@@ -44,23 +44,22 @@ local plugins = {
       Events.plugin_setup:sub(Plugins.trld)
     end
   },
---  { 'norcalli/nvim-colorizer.lua',
---    config = function()
---      Events.plugin_setup:sub(Plugins.colorizer)
---    end
---  },
-  -- { 'Issafalcon/lsp-overloads.nvim' },
+
+   { 'Issafalcon/lsp-overloads.nvim' },
   -- LANG: treesitter and language specific plugins
 ---[[
   { p.treesitter,
     build = ':TSUpdate',
   },
+
   { 'JoosepAlviste/nvim-ts-context-commentstring',
     dependencies = p.treesitter,
   },
+--]]
   { 'SmiteshP/nvim-navic',
     dependencies = p.lspconfig,
   },
+---[[
   { 'nvim-treesitter/playground',
     dependencies = p.treesitter,
   },
@@ -78,9 +77,9 @@ local plugins = {
     end
   },
   -- STATUSBAR:
-  { 'rebelot/heirline.nvim',
-    dependencies = p.devicons,
-  },
+--  { 'rebelot/heirline.nvim',
+--    dependencies = p.devicons,
+--  },
   -- PLUGINS:
   { 'echasnovski/mini.nvim',
     config = function()
