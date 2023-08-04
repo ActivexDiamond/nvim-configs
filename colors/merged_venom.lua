@@ -187,9 +187,9 @@ local debug     = gen_shades '#FF00FF'
 
 local c = {
   -- ui
-  bg        = "#01050A",                --"#010A14",              --#191F24",
+  bg        = "#000B1A",                --"#010A14",              --#191F24",
   bg_float  = "#005F63",               --"#20505E",
-  line      = "#041326",
+  line      = "#041826",
   mg        = "#22FFFF",    
   fg        = "#CCCCCC",            --white[3],
   match     = grey[10],

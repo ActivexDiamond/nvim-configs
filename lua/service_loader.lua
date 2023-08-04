@@ -77,9 +77,9 @@ local plugins = {
     end
   },
   -- STATUSBAR:
---  { 'rebelot/heirline.nvim',
---    dependencies = p.devicons,
---  },
+  { 'rebelot/heirline.nvim',
+    dependencies = p.devicons,
+  },
   -- PLUGINS:
   { 'echasnovski/mini.nvim',
     config = function()

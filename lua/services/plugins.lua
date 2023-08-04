@@ -228,9 +228,8 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
         end
       }),
 
-      ['<PageDown>'] = cmp.mapping.scroll_docs(4),
-      ['<PageUp>']   = cmp.mapping.scroll_docs(-4),
-      ['<C-Space>']  = cmp.mapping.complete({}),
+--      ['<PageDown>'] = cmp.mapping.scroll_docs(4),
+--      ['<PageUp>']   = cmp.mapping.scroll_docs(-4),
       ['<C-e>']      = cmp.mapping.abort(),
       ['<Esc>']      = cmp.mapping.close(),
       ['<CR>']       = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
@@ -242,6 +241,10 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
         cmp.close()
         fb()
       end,
+
+--      ['<C-Space>']  = cmp.mapping.complete(),
+      ['<Tab>'] = cmp.mapping.select_next_item(),
+      ['<S-Tab>'] = cmp.mapping.select_prev_item(),
       ['<C-Down>'] = cmp.mapping.select_next_item(),
       ['<C-Up>'] = cmp.mapping.select_prev_item(),
     },
