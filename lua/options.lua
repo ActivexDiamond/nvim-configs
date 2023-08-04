@@ -5,7 +5,7 @@
 -- vim.g.did_load_filetypes = 0
 -- vim.g.do_filetype_lua   = 1
 
-vim.cmd.colorscheme 'venom_minimal'
+vim.cmd.colorscheme 'merged_venom'
 
 --lua stuff
 vim.o.completeopt = "menu,menuone"

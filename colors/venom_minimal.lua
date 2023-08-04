@@ -1,53 +1,3 @@
-local set_hl = function(group_name, opts)
-
-  local hl_opts = {
-    fg = opts.fg,
-    bg = opts.bg,
-    sp = opts.sp,
-
-    bold = opts.bold or false,
-    standout = opts.standout or false,
-    underline = opts.underline or false,
-    undercurl = opts.undercurl or false,
-    underdouble = opts.underdouble or false,
-    underdotted = opts.underdotted or false,
-    underdashed = opts.underdashed or false,
-    strikethrough = opts.strikethrough or false,
-    italic = opts.italic or false,
-    reverse = opts.reverse or false,
-    nocombine = opts.nocombine or false,
-  }
-
-  if opts.blend ~= nil then hl_opts.blend = clamp(opts.blend, 0, 100) end
-
-  if opts[1] ~= nil then hl_opts.link = opts[1] end
-
-  -- • blend: integer between 0 and 100
-  -- • link: name of another highlight group to link
-  -- to, see |:hi-link|.
-  -- • default: Don't override existing definition
-  -- |:hi-default|
-  -- • ctermfg: Sets foreground of cterm color
-  -- |highlight-ctermfg|
-  -- • ctermbg: Sets background of cterm color
-  -- |highlight-ctermbg|
-  -- • cterm: cterm attribute map, like
-  -- |highlight-args|. If not set, cterm attributes
-  -- will match those from the attribute map
-  -- documented above.
-
-  vim.api.nvim_set_hl(0, group_name, hl_opts)
-end
-
-local set_hls = function(hl_table)
-  for hl_group, opts in pairs(hl_table) do
-    set_hl(hl_group, opts)
-  end
-end
-
-
-local c = {}
-
 local highlights = {
   --Untested
   ['@definition.function']          = { fg = "#FF00FF" },
@@ -72,7 +22,7 @@ local highlights = {
   --Tested and works
   ['@constant']                     = { fg = "#FF2C60", bold = true },
   ['@variable']                     = { fg = "#FF3063" },
-  ['@parameter']                    = { fg = "#FFB389" },
+  ['@parameter']                    = { fg = "#FF3063" },
   ['@field']                        = { fg = "#22ffff" },
 
   
@@ -82,7 +32,7 @@ local highlights = {
 
   ['@method']                       = { fg = "#5F89D9" },                      --5A76AE
   ['@method.call']                  = { fg = "#2845FF" },
-  ['@variable.builtin']             = { fg = "#FF0000", italic = true},        --36576D
+  ['@variable.builtin']             = { fg = "#FFB389", italic = true},        --36576D
 
   ['@function.builtin']             = { fg = "#FF0000" },
   ['@constant.builtin']             = { fg = "#FF0000", bold = true },
@@ -111,18 +61,6 @@ local highlights = {
 
   --Listed but seems to not work.
   ['@string.escape']                = { fg = "#FFFFFF" }, 
- }
-
-function randomize()
-  for k, v in pairs(highlights) do
-      local r = math.random(0, 255)
-      local g = math.random(0, 255)
-      local b = math.random(0, 255)
-      local rgb = (r * 0x10000) + (g * 0x100) + b
-      v.fg = string.format("#%06x", rgb)
-  end
-end
-
---randomize()
+}
 
 set_hls(highlights)

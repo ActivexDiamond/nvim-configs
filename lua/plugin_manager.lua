@@ -35,7 +35,7 @@ M.setup = U.Service(function(plugins)
       path = '~/sectors/nvim/',
     },
     install = {
-      colorscheme = { 'venom' }
+      --colorscheme = { 'venom' }
     },
   })
 
