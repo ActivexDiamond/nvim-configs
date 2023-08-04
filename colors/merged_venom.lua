@@ -62,6 +62,18 @@ local actives_theme = {
 
   --Listed but seems to not work.
   ['@string.escape']                = { fg = "#FFFFFF" }, 
+
+  --Other
+  LineNr                       = { fg = "#006C7D" },    
+  CursorLineNr                 = { fg = "#009CB5", bold = true },    
+
+--[[
+  ColorColumn                       = { fg = "#FFFF22" },    
+  Cursor                            = { fg = "#FF0000" },    
+  CursorIM                          = { fg = "#00FF00" },    
+  CursorLine                        = { fg = "#0000FF" },    
+  Normal                            = { fg = "#FF00FF" },    
+--]]
 }
 
 ------------------------------ Potato's Stuff ------------------------------
@@ -175,19 +187,19 @@ local debug     = gen_shades '#FF00FF'
 
 local c = {
   -- ui
-  bg        = black[1],
-  bg_float  = black[4],
-  line      = black[2],
-  mg        = grey[1],
-  fg        = white[1],
+  bg        = "#01050A",                --"#010A14",              --#191F24",
+  bg_float  = "#005F63",               --"#20505E",
+  line      = "#041326",
+  mg        = "#22FFFF",    
+  fg        = "#CCCCCC",            --white[3],
   match     = grey[10],
   fold      = grey[8],
 
   -- general
-  err       = red[4],
-  info      = cyan[4],
-  warn      = yellow[4],
-  hint      = purple[4],
+  err       = "#FF0000",          --red[4],
+  info      = "#22FFFF",          --cyan[4],
+  warn      = "#D25C1C",          --yellow[4],
+  hint      = "#492263",          --purple[4],
 
   add       = green[2],
   mod       = blue[1],
