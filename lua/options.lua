@@ -64,11 +64,13 @@ vim.o.foldminlines   = 1 -- Minimum amount of lines per fold
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize'
 vim.o.viewoptions    = 'cursor,curdir'
 -- indenting
-vim.o.shiftwidth     = 2 -- How many whitespaces is an indent
-vim.o.tabstop        = 2 -- How many whitespaces is a /t
-vim.o.softtabstop    = 2 -- How many whitespaces is a <Tab> or <BS> key press
-vim.o.expandtab      = true -- Use spaces instead of tabs
--- vim.o.copyindent        = true
+vim.o.shiftwidth     = 4 -- How many whitespaces is an indent
+vim.o.tabstop        = 4 -- How many whitespaces is a /t
+vim.o.softtabstop    = 0 -- How many whitespaces is a <Tab> or <BS> key press
+vim.o.noexpandtab    = true -- Use spaces instead of tabs
+vim.o.copyindent     = true
+vim.o.preserveindent = true
+
 -- vim.o.smartindent       = true
 -- vim.o.autoindent        = false
 -- opt options

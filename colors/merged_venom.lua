@@ -5,20 +5,20 @@ local actives_theme = {
   ['@definition.method']            = { fg = "#FF00FF" },
   ['@name']                         = { fg = "#FF00FF" },
   ['@reference.call']               = { fg = "#FF00FF" },
-  ['@local.scope']                  = { fg = "#FF0000" },
-  ['@local.definition']             = { fg = "#0000FF" },
-  ['@local.reference']              = { fg = "#00ff00" },
-  ['@attribute']                    = { fg = "#99999F" },
+  ['@local.scope']                  = { fg = "#FF00FF" },
+  ['@local.definition']             = { fg = "#FF00FF" },
+  ['@local.reference']              = { fg = "#FF00FF" },
+  ['@attribute']                    = { fg = "#FF00FF" },
   ['@method']                       = { fg = "#FF00FF" },
   ['@function.call']                = { fg = "#FF00FF" },
   ['@method.call']                  = { fg = "#FF00FF" },
-  ['@preproc']                      = { fg = "#FF6600" },
+  ['@preproc']                      = { fg = "#FF00FF" },
   ['@_cdef_identifier']             = { fg = "#FF00FF" },
   ['@injection.content']            = { fg = "#FF00FF" },
   ['@fieldconstructor']             = { fg = "#FF00FF" },
 
   --Generic, found through testing.
---  ['@error']                        = { undercurl = true },
+  ['@error']                        = { undercurl = false },
   
   --Tested and works
   ['@constant']                     = { fg = "#FF2C60", bold = true },
@@ -66,7 +66,7 @@ local actives_theme = {
   --Other
   LineNr                       = { fg = "#006C7D" },    
   CursorLineNr                 = { fg = "#009CB5", bold = true },    
-
+  NeoTreeCursorLine            = { fg = "#22FFFF" },
 --[[
   ColorColumn                       = { fg = "#FFFF22" },    
   Cursor                            = { fg = "#FF0000" },    

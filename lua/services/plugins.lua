@@ -465,19 +465,19 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
   vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
   require 'neo-tree'.setup {
-    add_blank_line_at_top = true,
-    close_if_last_window = true,
+    add_blank_line_at_top = false,
+    close_if_last_window = false,
     -- use_popups_for_input = false,
-    popup_border_style = 'single',
+    popup_border_style = 'rounded',
     default_component_configs = {
       container = {
         enable_character_fade = false
       },
       modified = {
-        symbol = '•',
+        symbol = '*',
       },
       name = {
-        -- trailing_slash = false,
+        trailing_slash = true,
       },
       git_status = {
         symbols = {
@@ -532,7 +532,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
         }
       },
       indent = {
-        with_expanders = true,
+        with_expanders = false,
         expander_collapsed = '>',
         expander_expanded = 'v',
         expander_highlight = 'NeoTreeExpander',
@@ -551,15 +551,18 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
     },
     filesystem = {
       filtered_items = {
+      	visible = true,
         hide_dotfiles = true,
+        hide_gitignored = true,
         hide_by_name = {
           -- 'node_modules',
-          -- '__pycache__',
-          -- 'pnpm-lock.yaml',
-          -- 'package-lock.json',
+            '__pycache__',
+            'pnpm-lock.yaml',
+            'package-lock.json',
         },
         hide_by_pattern = {
           -- "*.import"
+            "*.luarc.*", "LICENSE*", "README*", "*.buildpath", "*.project", "*.travis.*"
         },
         never_show = {
         },
@@ -606,9 +609,22 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
     source_selector = {
       winbar = true,
       -- statusline = true,
-    }
-  }
+    },
 
+    event_handlers = {{
+      event = "neo_tree_buffer_enter",
+      handler = function() 
+      	-- TODO: fix this!
+        -- vim.cmd "highlight Cursor guibg=red guifg=green gui=reverse"
+        -- vim.o.guicursor = "a:block-blockon100-Cursor/Cursor"
+
+		vim.o.guicursor = "a:noCursor"
+	  end
+      },{
+      event = "neo_tree_buffer_leave",
+      handler = function() vim.o.guicursor = "a:hor25,v:block,i:ver25" end
+    }},
+  }
   Events.session_write_pre:sub [[NeoTreeClose]]
 end)
 

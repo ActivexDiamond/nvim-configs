@@ -163,7 +163,14 @@ M.setup_plugins = U.Service(function()
   end
 
   if Features:has(FT.CONF, 'neo-tree.nvim') then
-    M.key {'<C-e>',             '<CMD>Neotree toggle<CR>', mode = 'i n'}
+    M.key {'<C-e>',             '<CMD>Neotree buffers float<CR>', mode = 'i n'}
+    M.key {'<C-a>',             '<CMD>Neotree<CR>', mode = 'i n'}
+    M.key {'<C-A-e>',             '<CMD>Neotree close<CR>', mode = 'i n'}
+	M.key {'<tab>', function(state)
+  	  state.commands["open"](state)
+  	  vim.cmd("Neotree reveal")
+
+	end}
   end
 
   if Features:has(FT.CONF, 'fold-cycle.nvim') then

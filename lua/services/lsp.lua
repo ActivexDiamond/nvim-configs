@@ -88,9 +88,10 @@ M.setup_servers = U.Service({{FT.PLUGIN, 'mason.nvim'}}, function(lsp_servers_co
             telemetry = { enable = false },
           }
         },
-        -- on_attach = function(client, bufnr)
-        --   Lsp.setup_buf_fmt_on_save(client, bufnr)
-        -- end
+        on_attach = function(client, bufnr)
+          client.server_capabilities.semanticTokensProvider = nil
+           --Lsp.setup_buf_fmt_on_save(client, bufnr)
+        end
       })
     end,
     texlab = function()
