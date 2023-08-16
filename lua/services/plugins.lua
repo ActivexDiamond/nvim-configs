@@ -165,12 +165,18 @@ M.gitsigns = U.Service({{FT.CONF, "gitsigns.nvim"}}, {}, function()
   }
 end)
 
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
 M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
   -- TODO: conditionally load luasnip realted stuff depending on features (requries plugin manager dependency feature registering)
   local ls = require 'luasnip'
   local ls_types = require 'luasnip.util.types'
-
-  require 'luasnip'.config.setup({
+  local luasnip = require 'luasnip'
+  luasnip.config.setup({
     ext_opts = {
       [ls_types.choiceNode] = {
         active = { virt_text = { { Icons.item_kinds.Snippet, 'SnippetChoiceIndicator' } } },
@@ -187,64 +193,55 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
   require("luasnip.loaders.from_snipmate").load()
 
   local cmp = require 'cmp'
-
-  local function ls_tab(fb)
-    -- if cmp.visible() then cmp.select_next_item()
-    if ls.expand_or_locally_jumpable() then ls.expand_or_jump()
-    else fb() end
-  end
-
-  local function ls_s_tab(fb)
-    -- if cmp.visible() then cmp.select_prev_item()
-    if ls.jumpable(-1) then ls.jump(-1)
-    else fb() end
-  end
-
   cmp.setup {
-    -- TODO: conditionally load luasnip realted stuff depending on features (requries plugin manager dependency feature registering)
     snippet = { expand = function(args) ls.lsp_expand(args.body) end },
 
     mapping = {
-      -- TODO: conditionally load luasnip realted stuff depending on features (requries plugin manager dependency feature registering)
-      -- ["<Tab>"]   = function(fb) tab(fb) end,
-      -- ["<S-Tab>"] = function(fb) s_tab(fb) end,
-
-      ["<Tab>"]   = cmp.mapping({
-        i = function(fb) ls_tab(fb) end,
-        c = function(fb)
-          if cmp.visible() then cmp.select_next_item()
-          else cmp.complete() end
-          -- local complete_or_next = not cmp.visible() and cmp.mapping.complete() or cmp.mapping.select_next_item()
-          -- complete_or_next(fb)
-        end
-      }),
-      ["<S-Tab>"] = cmp.mapping({
-        i = function(fb) ls_s_tab(fb) end,
-        c = function(fb)
-          if cmp.visible() then cmp.select_prev_item()
-          else cmp.complete() end
-          -- local complete_or_prev = not cmp.visible() and cmp.mapping.complete() or cmp.mapping.select_prev_item()
-          -- complete_or_prev(fb)
-        end
-      }),
-
---      ['<PageDown>'] = cmp.mapping.scroll_docs(4),
---      ['<PageUp>']   = cmp.mapping.scroll_docs(-4),
+      ['<PageDown>'] = cmp.mapping.scroll_docs(16),
+      ['<PageUp>']   = cmp.mapping.scroll_docs(-16),
       ['<C-e>']      = cmp.mapping.abort(),
       ['<Esc>']      = cmp.mapping.close(),
-      ['<CR>']       = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
-      ['<Down>'] = function(fb)
-        cmp.close()
-        fb()
-      end,
-      ['<Up>'] = function(fb)
-        cmp.close()
-        fb()
-      end,
+--      ['<CR>']       = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
+      ['<Down>'] = cmp.mapping.close(),
+      ['<Up>'] = cmp.mapping.close(),
 
 --      ['<C-Space>']  = cmp.mapping.complete(),
-      ['<Tab>'] = cmp.mapping.select_next_item(),
-      ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+      ['<CR>'] = cmp.mapping(function(fallback)
+        if true then fallback() end
+        if cmp.get_active_entry() then
+          cmp.confirm()
+        elseif luasnip.jumpable() then
+          while luasnip.expand_or_jumpable() do
+            luasnip.jump(1)
+          end
+        else
+            fallback()
+        end
+      end, { "i", "s"}),
+
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+          -- they way you will only jump inside the snippet region
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
+
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
       ['<C-Down>'] = cmp.mapping.select_next_item(),
       ['<C-Up>'] = cmp.mapping.select_prev_item(),
     },
@@ -264,20 +261,8 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
     formatting = {
       fields = { "kind", "abbr", "menu" },
       format = function(entry, vim_item)
-        -- if entry.source.name == 'omni' then
-        --   if entry.completion_item.documentation == nil then
-        --     entry.completion_item.documentation = vim_item.menu
-        --     vim_item.menu = nil
-        --   end
-        --   vim_item.kind = 'Ω'
-        --   vim_item.kind_hl_group = 'CmpItemKindProperty'
-
-        -- if entry.source.name == 'codeium' then
-        --   vim_item.kind = ''
-        -- else
           vim_item.kind = Icons.item_kinds[vim_item.kind] or ''
-        -- end
-        return vim_item
+          return vim_item
       end
     },
     window = {
