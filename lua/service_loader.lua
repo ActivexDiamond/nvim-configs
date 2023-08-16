@@ -10,6 +10,22 @@ Lang = require 'services.lang'
 Lsp = require 'services.lsp'
 Statusbar = require 'services.statusbar'
 
+---Some OS-specific stuff.
+local uname = vim.loop.os_uname()
+local OS = uname.sysname
+
+local IS_MAC = OS == 'Darwin'
+local IS_LINUX = OS == 'Linux'
+local IS_WINDOWS = OS:find 'Windows' and true or false
+local IS_WSL = IS_LINUX and uname.release:find 'Microsoft' and true or false
+
+--TODO: Figure out which one is better for windows.
+local FZF_WINDOWS_BUILD_CMD = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+--local FZF_WINDOWS_BUILD_CMD = 'mkdir build && gcc -O3 -Wall -Werror -fpic -std=gnu99 -shared src/fzf.c -o build/libfzf.dll'
+local FZF_WINDOWS_UNIX_BUILD_CMD = 'make'
+
+local FZF_BUILD_CMD = IS_WINDOWS and FZF_WINDOWS_BUILD_CMD or FZF_UNIX_BUILD_CMD
+
 local p = {
   plenary = 'nvim-lua/plenary.nvim',
   devicons = 'kyazdani42/nvim-web-devicons',
@@ -128,7 +144,7 @@ local plugins = {
     dependencies = {
       p.plenary,
       { 'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
+        build = FZF_BUILD_CMD,
       },
     },
     config = function()
