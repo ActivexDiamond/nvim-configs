@@ -78,6 +78,9 @@ M.setup = U.Service(function()
   -- swap # and *
   M.key {'*',            '#'}
   M.key {'#',            '*'}
+
+  --Active's stuff
+  M.key {'<C-d>', '<C-o>dd', mode = 'i'}
   -- open man pages in new tabs
   -- M.key {'K',                 ':tab Man<CR>'}
   -- zt and zb with arrows
