@@ -9,6 +9,7 @@ Plugins = require 'services.plugins'
 Lang = require 'services.lang'
 Lsp = require 'services.lsp'
 Statusbar = require 'services.statusbar'
+UserFuncs = require 'services.userfuncs'
 
 ---Some OS-specific stuff.
 local uname = vim.loop.os_uname()

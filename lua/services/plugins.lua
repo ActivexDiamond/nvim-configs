@@ -315,125 +315,6 @@ M.coq = U.Service({{FT.CONF, 'coq_nvim'}}, {}, function()
   vim.cmd [[COQnow --shut-up]]
 end)
 
-M.nvim_tree = U.Service({{FT.CONF, "nvim-tree.lua"}}, {}, function()
-  vim.g.nvim_tree_allow_resize = 1
-
-  local nvimtree_keybindings = {
-    { key = "<C-Up>", action = 'first_sibling' },
-    { key = "<C-Down>", action = 'last_sibling' },
-    { key = "d", action = 'trash' },
-    { key = "D", action = 'remove' },
-    { key = "t", action = 'tabnew' },
-    { key = "?", action = 'toggle_help' },
-    { key = "<space>", action = 'cd' },
-    { key = "<BS>", action = 'dir_up' },
-
-    { key = "<C-e>", action = '' },
-    { key = "g?", action = '' },
-  }
-
-  require 'nvim-tree'.setup {
-    hijack_cursor       = true,
-    sync_root_with_cwd  = true,
-    view                = {
-      -- adaptive_size = true,
-      centralize_selection = true,
-      mappings = {
-        custom_only = false,
-        list = nvimtree_keybindings
-      }
-    },
-    renderer            = {
-      full_name = true,
-      highlight_git = true,
-      group_empty = true,
-      indent_markers = {
-        enable = true,
-        icons = {
-          corner = "└",
-          item   = "├",
-          edge   = "│",
-          none   = " ",
-        },
-      },
-      icons = {
-        git_placement = 'after',
-        symlink_arrow = ' -> ',
-        show = {
-          folder_arrow = false,
-        },
-        glyphs = {
-          default = '',
-          symlink = '',
-          modified = '•',
-          folder = {
-            arrow_open = "",
-            arrow_closed = "",
-            default = "",
-            open = "",
-            empty = "",
-            empty_open = "",
-            symlink = "",
-            symlink_open = "",
-          },
-          git = {
-            unstaged = "",
-            staged = "",
-            unmerged = "",
-            renamed = "r ",
-            untracked = "-",
-            deleted = "d",
-            ignored = "i",
-          },
-        }
-      },
-      symlink_destination = true,
-    },
-    update_focused_file = {
-      enable = true,
-      -- ignore_list = {}
-    },
-    ignore_ft_on_setup  = { 'startify', 'dashboard' },
-    diagnostics         = {
-      enable = true,
-      icons = {
-        hint    = Icons.diagnostic_states.Hint,
-        info    = Icons.diagnostic_states.Info,
-        warning = Icons.diagnostic_states.Warn,
-        error   = Icons.diagnostic_states.Error,
-      },
-    },
-    filters             = {
-      dotfiles = false,
-      custom = { 'node_modules', '.cache', '*.import', '__pycache__', 'pnpm-lock.yaml', 'package-lock.json' }
-    },
-    modified            = {
-      enable = true
-    },
-    git                 = {
-      show_on_open_dirs = false
-    },
-    actions             = {
-      change_dir = {
-        enable = true,
-        global = true,
-      },
-      open_file = {
-        window_picker = {
-          enable = true,
-          chars = "1234567890",
-        }
-      }
-    },
-    tab                 = {
-      sync = {
-        open = true,
-        close = true,
-      }
-    },
-  }
-end)
-
 M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
   require 'window-picker'.setup {
     autoselect_one = true,
@@ -487,7 +368,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
           ["w"] = "open_with_window_picker",
           ["C"] = "close_node",
           ["z"] = "close_all_nodes",
-          -- ["Z"] = "expand_all_nodes",
+          ["Z"] = "expand_all_nodes",
           ["a"] = {
             "add",
             -- some commands may take optional config options, see `:h neo-tree-mappings` for details
@@ -566,7 +447,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
           local msg = "Are you sure you want to trash " .. path
           inputs.confirm(msg, function(confirmed)
             if not confirmed then return end
-            U.trash_file(path)
+            vim.fn.jobstart("trash " .. path)
             require("neo-tree.sources.manager").refresh(state.name)
           end)
         end,
@@ -579,11 +460,13 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
           end
         end
       },
-      window = {
+     window = {
         mappings = {
+          ["Z"] = "expand_all_nodes",
           ["s"] = "system_open",
           ["v"] = "open_vsplit",
           ["\\"] = "open_in_terminal",
+          ["<space>"] = "open",
         },
       },
       follow_current_file = {
