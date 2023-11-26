@@ -10,6 +10,7 @@ Lang = require 'services.lang'
 Lsp = require 'services.lsp'
 Statusbar = require 'services.statusbar'
 UserFuncs = require 'services.userfuncs'
+ActivesStuff = require 'services.actives_stuff'
 
 ---Some OS-specific stuff.
 local uname = vim.loop.os_uname()
@@ -97,6 +98,18 @@ local plugins = {
   { 'rebelot/heirline.nvim',
     dependencies = p.devicons,
   },
+  -- Active's Stuff:
+  { 'vim-scripts/a.vim',
+    config = function()
+      Events.plugin_setup:sub(Plugins.a_vim)
+    end
+  },
+  { 'windwp/nvim-autopairs',
+    config = function()
+      Events.plugin_setup:sub(Plugins.autopairs)
+    end
+  },
+
   -- PLUGINS:
   { 'echasnovski/mini.nvim',
     config = function()
@@ -207,6 +220,9 @@ local plugins = {
       Events.plugin_setup:sub(Plugins.paint)
     end,
   },
+  { 'tpope/vim-abolish',
+    --config
+  },
 }
 
 Events.install_pre:sub(function()
@@ -243,6 +259,7 @@ Events.install_post:sub(function()
   Statusbar.setup()
 
   Bind.setup_plugins()
+
 end)
 
 PluginManager.setup(plugins)

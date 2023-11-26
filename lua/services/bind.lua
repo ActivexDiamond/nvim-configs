@@ -79,9 +79,7 @@ M.setup = U.Service(function()
   M.key {'*',            '#'}
   M.key {'#',            '*'}
 
-  --Active's stuff
-  M.key {'<C-d>', '<C-o>dd', mode = 'i v'}
-  M.key {'<C-d>', 'dd', mode = 'n'}
+ 	
   -- open man pages in new tabs
   -- M.key {'K',                 ':tab Man<CR>'}
   -- zt and zb with arrows
@@ -249,7 +247,20 @@ M.setup_plugins = U.Service(function()
   -- M.key {'<C-Right>', '<Plug>luasnip-next-choice'}
   -- imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
   -- smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
+  --Active's stuff
+  M.key {'<C-d>', '<C-o>dd',         mode = 'i v'}
+  M.key {'<C-d>', 'dd',              mode = 'n'}
 
+  --if Features:has(FT.CONF, 'a.vim') then
+    M.key {'<C-x>', '<CMD>A<CR>',    mode = 'n i x'}           --x for extension (c/h/hpp/cpp/etc...)
+    M.key {'xb',    '<CMD>A<CR>',    mode = 'n'}               --b for buffer.
+    M.key {'xv',    '<CMD>AV<CR>',   mode = 'n'}               --for vsplit.
+  --end
+
+    M.key {'<M-a>',    '<CMD>call append(line("."),   repeat([""], v:count1))<CR>',   mode = 'n'}
+    M.key {'<M-s>',    '<CMD>call append(line(".")-1,   repeat([""], v:count1))<CR>',   mode = 'n'}
+
+    M.key {'<M-z>',    '<CMD>lua vim.lsp.buf.code_action()<CR>',   mode = 'n i x'}
 end)
 
 return M

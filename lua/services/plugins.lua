@@ -191,23 +191,26 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
 
   -- require("luasnip.loaders.from_snipmate").lazy_load({paths = "~/.config/nvim/snips"})
   require("luasnip.loaders.from_snipmate").load()
-
+  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
   local cmp = require 'cmp'
-  cmp.setup {
-    snippet = { expand = function(args) ls.lsp_expand(args.body) end },
+ -- cmp.event:on('confirmation_done', cmp_autopairs.on_confirm_done())
 
-    mapping = {
+  ---@diagnostic disable: missing-parameter
+  cmp.setup {    
+	snippet = { expand = function(args) ls.lsp_expand(args.body) end },
+
+	mapping = {
       ['<PageDown>'] = cmp.mapping.scroll_docs(16),
       ['<PageUp>']   = cmp.mapping.scroll_docs(-16),
       ['<C-e>']      = cmp.mapping.abort(),
       ['<Esc>']      = cmp.mapping.close(),
---      ['<CR>']       = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
-      ['<Down>'] = cmp.mapping.close(),
-      ['<Up>'] = cmp.mapping.close(),
+--      ['<CR>']       = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
+      ['<Down>'] = function(fallback) cmp.close(); fallback() end,
+      ['<Up>']   = function(fallback) cmp.close(); fallback() end,
 
 --      ['<C-Space>']  = cmp.mapping.complete(),
       ['<CR>'] = cmp.mapping(function(fallback)
-        if true then fallback() end
+--        if true then fallback() end
         if cmp.get_active_entry() then
           cmp.confirm()
         elseif luasnip.jumpable() then
@@ -294,7 +297,7 @@ M.cmp_ls = U.Service({{FT.CONF, "nvim-cmp"}}, {}, function()
     }
   }
 
-  cmp.setup.cmdline({ '/', '?' }, {
+	cmp.setup.cmdline({ '/', '?' }, {
     -- mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = 'buffer' },

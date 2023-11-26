@@ -85,7 +85,6 @@ M.setup_servers = U.Service({{FT.PLUGIN, 'mason.nvim'}}, function(lsp_servers_co
               keywordSnippet="Replace",
               callSnippet="Replace",
             },
-            telemetry = { enable = false },
           }
         },
         on_attach = function(client, bufnr)
