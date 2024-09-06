@@ -99,14 +99,18 @@ local plugins = {
     dependencies = p.devicons,
   },
   -- Active's Stuff:
-  { 'vim-scripts/a.vim',
-    config = function()
-      Events.plugin_setup:sub(Plugins.a_vim)
+  { 'vim-scripts/a.vim', },
+  { 'maxbane/vim-asm_ca65', },
+  { 'kana/vim-smartword', },
+  { 'folke/todo-comments.nvim',
+  	dependencies = p.plenary,
+  	config = function()
+      Events.plugin_setup:sub(ActivesStuff.todo_comments)
     end
   },
-  { 'windwp/nvim-autopairs',
-    config = function()
-      Events.plugin_setup:sub(Plugins.autopairs)
+ { 'windwp/nvim-autopairs',
+   config = function()
+      Events.plugin_setup:sub(ActivesStuff.autopairs)
     end
   },
 
@@ -260,6 +264,7 @@ Events.install_post:sub(function()
 
   Bind.setup_plugins()
 
+  ActivesStuff.setup()
 end)
 
 PluginManager.setup(plugins)

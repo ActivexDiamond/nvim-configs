@@ -22,22 +22,6 @@ M.setup = U.Service(function()
   -- DISABLES
   -- ctrl-x submode, c-p and c-n
   M.key {'<C-x>',            '<Nop>', mode = 'i'}
-  -- disable arrow keys
-  -- M.key {'<Down>',           '<Nop>', mode = 'n x i'}
-  -- M.key {'<Up>',             '<Nop>', mode = 'n x i'}
-  -- M.key {'<Left>',           '<Nop>', mode = 'n x i'}
-  -- M.key {'<Right>',          '<Nop>', mode = 'n x i'}
-  -- home and end
-  -- M.key {'<Home>',           '<Nop>', mode = 'n x i'}
-  -- M.key {'<End>',            '<Nop>', mode = 'n x i'}
-
-  -- CURSED
-  --- hjkl to jkil
-  -- M.key {'i',                'k', mode = 'n x i'}
-  -- M.key {'k',                'j', mode = 'n x i'}
-  -- M.key {'j',                'h', mode = 'n x i'}
-  -- M.key {'h',                '<Nop>', mode = 'n x i'}
-
 
   -- BASE
   -- write, undo, quit
@@ -105,12 +89,10 @@ M.setup = U.Service(function()
     M.key {break_point,       break_point..'<C-g>u', mode = 'i'}
   end
   -- goto and display to nex/prev lsp diagnositc
-  M.key {'d<Left>',           function() vim.diagnostic.goto_prev({ float = false }) end}
-  M.key {'d<Right>',          function() vim.diagnostic.goto_next({ float = false }) end}
+  M.key {'<leader><Left>',           function() vim.diagnostic.goto_prev({ float = false }) end}
+  M.key {'<leader><Right>',          function() vim.diagnostic.goto_next({ float = false }) end}
   -- tabs
-  M.key {'<C-t>',             vim.cmd.tabnew}
-  M.key {'<S-Right>',         vim.cmd.tabnext}
-  M.key {'<S-Left>',          vim.cmd.tabprevious}
+--  M.key {'<C-t>',             vim.cmd.tabnew}
   -- buffers
   M.key {'<A-Right>',         vim.cmd.bnext}
   M.key {'<A-Left>',          vim.cmd.bprevious}
@@ -152,13 +134,10 @@ M.setup_plugins = U.Service(function()
   M.key {'<Esc>',             TermSmartEsc, mode = 't', opts = { expr = true }}
 
   -- PLUGINS
-  if Features:has(FT.CONF, 'nvim-toggleterm.lua') then
-    -- M.key {[[<C-\>]],           '<CMD>ToggleTermToggleAll<CR>', mode = 'n'}
-    -- M.key {[[<C-\>]],           [[<C-\><C-n><CMD>ToggleTermToggleAll<CR>]], mode = 't'}
-
-    M.key {[[<C-\>]],           '<CMD>ToggleTerm<CR>', mode = 'n'}
-    M.key {[[<C-\>]],           [[<C-\><C-n><CMD>ToggleTerm<CR>]], mode = 't'}
-  end
+--  if Features:has(FT.CONF, 'nvim-toggleterm.lua') then
+    M.key {'<M-]>',           '<CMD>ToggleTerm<CR>', mode = 'n'}
+    M.key {'<M-]>',           [[<C-\><C-n><CMD>ToggleTerm<CR>]], mode = 't'}
+--  end
 
   if Features:has(FT.CONF, 'nvim-tree.lua') then
     M.key {'<C-e>',             '<CMD>NvimTreeToggle<CR>', mode = 'i n'}
@@ -248,19 +227,68 @@ M.setup_plugins = U.Service(function()
   -- imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
   -- smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
   --Active's stuff
-  M.key {'<C-d>', '<C-o>dd',         mode = 'i v'}
-  M.key {'<C-d>', 'dd',              mode = 'n'}
+  M.key {'<C-d>', '<C-o>"_dd',         mode = 'i v'}
+  M.key {'<C-d>', '"_dd',              mode = 'n'}
 
   --if Features:has(FT.CONF, 'a.vim') then
-    M.key {'<C-x>', '<CMD>A<CR>',    mode = 'n i x'}           --x for extension (c/h/hpp/cpp/etc...)
-    M.key {'xb',    '<CMD>A<CR>',    mode = 'n'}               --b for buffer.
-    M.key {'xv',    '<CMD>AV<CR>',   mode = 'n'}               --for vsplit.
+    M.key {'<C-x>', '<CMD>A<CR>',    mode = 'n i x'}           --x for eXtension (c/h/hpp/cpp/etc...)
+    M.key {'xb',    '<CMD>A<CR>',    mode = 'n'}               --b for Buffer.
+    M.key {'xv',    '<CMD>AV<CR>',   mode = 'n'}               --for Vsplit.
   --end
 
-    M.key {'<M-a>',    '<CMD>call append(line("."),   repeat([""], v:count1))<CR>',   mode = 'n'}
-    M.key {'<M-s>',    '<CMD>call append(line(".")-1,   repeat([""], v:count1))<CR>',   mode = 'n'}
+	--Smartword mappings.
+    M.key {'w',    '<Plug>(smartword-w)',   mode = 'n v '}
+    M.key {'b',    '<Plug>(smartword-b)',   mode = 'n v '}
+    M.key {'e',    '<Plug>(smartword-e)',   mode = 'n v '}
+    M.key {'ew',    '<Plug>(smartword-eg)',   mode = 'n v '}
 
+	--Add newline after/before (respectively) currently selected line.
+    M.key {'<M-a>',    '<CMD>call append(line("."),   repeat([""], v:count1))<CR>',   mode = 'n i'}
+    M.key {'<M-s>',    '<CMD>call append(line(".")-1,   repeat([""], v:count1))<CR>',   mode = 'n i'}
+
+	--Call the LSP's code_action function.
     M.key {'<M-z>',    '<CMD>lua vim.lsp.buf.code_action()<CR>',   mode = 'n i x'}
+
+	-- word/WORD DELETION
+	
+    --Delete the word before the cursor, while preserving your mode and set to "b register.
+    M.key {'<C-BS>',    '<C-o>"bdb',   mode = 'i'}
+    M.key {'<C-BS>',    '"bd<Plug>(smartword-b)',   mode = 'n'}
+
+    --Delete the word after the cursor, while preserving your mode and set to "w register. (Opposite of the old CTRL-w)
+    M.key {'<C-Bslash>',    '<C-o>"wd<Plug>(smartword-w)',   mode = 'i'}
+    M.key {'<C-Bslash>',    '"wd<Plug>(smartword-w)',   mode = 'n'}
+
+	--Delete the word under the cursors, and return to the previous mode.
+	--FIXME: This didn't work with smartword motions, as the others did.
+    M.key {'<C-w>',    '<C-o>"udaw',   mode = 'i'}
+    M.key {'<C-w>',    '"udaw',   mode = 'n'}
+
+    -- All of these are the same as the above, but with WORD instead of word.
+    --Delete the WORD before the cursor, while preserving your mode and set to "b register.
+	M.key {'<M-BS>',    '<C-o>"bdB',   mode = 'i'}
+    M.key {'<M-BS>',    '"bdB',   mode = 'n'}
+
+    --Delete the WORD after the cursor, while preserving your mode and set to "w register. (Opposite of the old CTRL-w)
+    M.key {'<M-Bslash>',    '<C-o>"wdW',   mode = 'i'}
+    M.key {'<M-Bslash>',    '"wdW',   mode = 'n'}
+
+
+	--Delete the WORD under the cursors, and return to the previous mode.
+    M.key {'<M-w>',    '<C-o>"udaW',   mode = 'i'}
+    M.key {'<M-w>',    '"udaW',   mode = 'n'}
+
+    --Introduce <BS> functionality into nmode. Note that <Del> already works as expected (FIXME: Unless you Del while at EOL, then it starts going backwards).
+    M.key {'<BS>',    'X',   mode = 'n'}
+
+    --Save all and exit.
+    M.key {'<F3>',    '<CMD>xa<CR>',   mode = 'n i v x t'}
+	--Quit without saving anything. Fails if any unsaved changes exist.
+    M.key {'<F4>',    '<CMD>qa<CR>',   mode = 'n i v x t'}
+	--Force quit without saving anything. Note that: <F16> == <S-F4>
+    M.key {'<F16>',    '<CMD>qa!<CR>',   mode = 'n i v x t'}
+
 end)
+--<F16>
 
 return M

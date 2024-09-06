@@ -1,13 +1,16 @@
 --- defines vanialla options, constants, enums and global variables.
 -- @module options
 
+-- Navigation options.
+vim.o.keymodel = 'startsel'
+
 -- use filetype.lua instead of filetype.vim
 -- vim.g.did_load_filetypes = 0
 -- vim.g.do_filetype_lua   = 1
 
 vim.cmd.colorscheme 'merged_venom'
 
---lua stuff
+-- Lua stuff
 vim.o.completeopt = "menu,menuone"
 
 -- vim builtin options
@@ -63,11 +66,12 @@ vim.o.foldnestmax    = 10 -- Maximum amount of nested folds
 vim.o.foldminlines   = 1 -- Minimum amount of lines per fold
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize'
 vim.o.viewoptions    = 'cursor,curdir'
+
 -- indenting
 vim.o.shiftwidth     = 4 -- How many whitespaces is an indent
 vim.o.tabstop        = 4 -- How many whitespaces is a /t
 vim.o.softtabstop    = 0 -- How many whitespaces is a <Tab> or <BS> key press
-vim.o.noexpandtab    = true -- Use spaces instead of tabs
+vim.o.expandtab      = false -- Use spaces instead of tabs
 vim.o.copyindent     = true
 vim.o.preserveindent = true
 
@@ -81,13 +85,20 @@ vim.opt.fillchars    = {
   -- foldclose =	'>',
   -- foldopen  = ' ',
   -- foldsep   = ' ',
-  -- foldopen  = '┬',
+-- foldopen  = '┬',
   -- foldsep   = '│',
 }
 vim.opt.spelllang    = { 'en_us' }
 vim.opt.whichwrap:append '<,>,[,],h,l' -- Move to next line with theses keys
 -- vim.opt.shortmess:append 'c' -- Don't pass messages to |ins-completion-menu| (required by compe)
 
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	group = vim.api.nvim_create_augroup("FormatOptions", { clear = true }),
+	pattern = { "*" },
+	callback = function()
+		vim.opt_local.fo:remove("r")
+	end,
+})
 -- diagnostic options
 vim.diagnostic.config {
   signs = true,

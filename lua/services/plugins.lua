@@ -524,7 +524,6 @@ end)
 
 M.toggle_term = U.Service({{FT.CONF, "toggleterm.nvim"}}, {}, function()
   require 'toggleterm'.setup {
-    open_mapping = [[<C-\>]],
     insert_mappings = true,
     terminal_mappings = true,
     direction = 'horizontal',
