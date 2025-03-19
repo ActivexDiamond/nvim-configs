@@ -176,10 +176,10 @@ vim.cmd([[
 
 function _scroll_current_buffer(n)
 	local cur = vim.api.nvim_win_get_cursor(0)
-	local curY, curX = cur[1], cur[0]
-	local targetY = math.max(0, curY + n)
+	local curY, curX = cur[1], cur[2]
+	local targetY = math.min(math.max(1, curY + n), vim.api.nvim_buf_line_count(0))
 	vim.api.nvim_win_set_cursor(0, {[1] = targetY, [2] = curX})
-	vim.api.nvim_win_set_cursor(0, {[1] = 100, [2] = 5})
+	-- vim.api.nvim_win_set_cursor(0, {[1] = 100, [2] = 5})
 end
 
 return M
