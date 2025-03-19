@@ -74,6 +74,13 @@ local actives_theme = {
   CursorLine                        = { fg = "#0000FF" },    
   Normal                            = { fg = "#FF00FF" },    
 --]]
+
+--  ActiveWindow 				  = {bg = "#000d1f" },
+--  InactiveWindow 			  = {bg = "#000B1A" },
+
+  ActiveWindow 			  = {bg = "#000B1A" },
+  InactiveWindow 		  = {bg = "#000814" },
+
 }
 
 ------------------------------ Potato's Stuff ------------------------------
@@ -187,7 +194,7 @@ local debug     = gen_shades '#FF00FF'
 
 local c = {
   -- ui
-  bg        = "#000B1A",                --"#010A14",              --#191F24",
+  bg        = "#000814",                --"#010A14",              --#191F24",
   bg_float  = "#005F63",               --"#20505E",
   line      = "#041826",
   mg        = "#22FFFF",    
@@ -821,7 +828,10 @@ healthBar               = { '@debug' };
   Camel                   = { fg = c.warn };
 }
 
------------------------------- Merge & Activated ------------------------------
+------------------------------ Highlight Active Window ------------------------------
+
+
+------------------------------ Merge & Activate ------------------------------
 for k, v in pairs(actives_theme) do
     potatos_theme[k] = v
 end

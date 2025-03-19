@@ -81,9 +81,9 @@ M.setup_servers = U.Service({{FT.PLUGIN, 'mason.nvim'}}, function(lsp_servers_co
                --checkThirdParty = false,
              },
             completion = {
-              keywordSnippet="Disable",
+              displayContext = 5,
               keywordSnippet="Replace",
-              callSnippet="Replace",
+--              callSnippet="Both",
             },
           }
         },

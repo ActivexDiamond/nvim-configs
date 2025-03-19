@@ -138,3 +138,10 @@ vim.diagnostic.config {
     -- end,
   }
 }
+
+--Highlight active window
+vim.api.nvim_create_augroup("HighlightActiveWindow", { clear = true })
+vim.api.nvim_create_autocmd("CursorMoved", {
+  command = "setlocal winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow",
+  group = "HighlightActiveWindow",
+})

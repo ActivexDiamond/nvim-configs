@@ -71,7 +71,14 @@ M.telescope_ui_select = U.Service({{FT.CONF, "telescope_ui_select.nvim"}}, {}, f
 end)
 
 M.telescope = U.Service({{FT.CONF, 'telescope.nvim'},{FT.CONF, 'telescope-fzf-native.nvim'}}, {}, function()
+  local ts_actions = require 'telescope.actions'
   require 'telescope'.setup {
+    pickers = {
+      buffers = {mappings = {i = { ["<CR>"] = ts_actions.select_tab_drop }}},
+      find_files = {mappings = {i = { ["<CR>"] = ts_actions.select_tab_drop }}},
+      git_files = {mappings = {i = { ["<CR>"] = ts_actions.select_tab_drop }}},
+      old_files = {mappings = {i = { ["<CR>"] = ts_actions.select_tab_drop }}},
+	},
     extensions = {
       fzf = {
         fuzzy = true, -- false will only do exact matching
@@ -334,6 +341,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
   vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
   require 'neo-tree'.setup {
+  	opts = {width = 100},
     add_blank_line_at_top = false,
     close_if_last_window = false,
     -- use_popups_for_input = false,
@@ -363,6 +371,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
           conflict  = "",
         }
       },
+      	--[[
       window = {
         mappings = {
           ["S"] = "split_with_window_picker",
@@ -400,6 +409,7 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
           ['>'] = "next_source",
         }
       },
+      --]]
       indent = {
         with_expanders = false,
         expander_collapsed = '>',
@@ -464,12 +474,15 @@ M.neo_tree = U.Service({{FT.CONF, "neo-tree.nvim"}}, {}, function()
         end
       },
      window = {
+     	width = 30,
         mappings = {
           ["Z"] = "expand_all_nodes",
           ["s"] = "system_open",
           ["v"] = "open_vsplit",
-          ["\\"] = "open_in_terminal",
+          ["V"] = "open_split",
+          ["q"] = "open_in_terminal",          	
           ["<space>"] = "open",
+          --Also, b to edit base name
         },
       },
       follow_current_file = {
@@ -538,13 +551,13 @@ M.toggle_term = U.Service({{FT.CONF, "toggleterm.nvim"}}, {}, function()
     highlights = {
       CursorLine = {},
     },
-    -- winbar = {
-    --   enabled = true,
-    --   -- name_formatter = function(term)
-    --   --   -- log(term)
-    --   --   return term.name
-    --   -- end
-    -- }
+     winbar = {
+       enabled = false,
+       -- name_formatter = function(term)
+       --   -- log(term)
+       --   return term.name
+       -- end
+     }
   }
 end)
 

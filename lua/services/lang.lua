@@ -75,20 +75,19 @@ M.setup = U.Service({{FT.LANG, 'setup'}}, {}, function()
       }
     }
   end
-
   -- mini.comment
   if Features:has(FT.CONF, 'mini.nvim') then
     require 'mini.comment'.setup {
       mappings = {
-        comment = '<space>c',
-        comment_line = '<space>c',
+        comment_line = '<C-S-x>',
+        comment_visual = '<C-S-x>',
         textobject = '',
       },
       hooks = {
-        pre = function()
-          require('ts_context_commentstring.internal').update_commentstring()
-        end,
-        post = function() end,
+--        pre = function()
+--          require('ts_context_commentstring.internal').update_commentstring()
+--        end,
+--        post = function() end,
       },
     }
   end

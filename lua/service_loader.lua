@@ -39,7 +39,17 @@ local p = {
 }
 local plugins = {
   -- LSP: language server protocol related
-  { p.lspconfig },
+  { p.lspconfig,
+    dependencies = { 
+      'SmiteshP/nvim-navbuddy',
+        dependencies = {
+        'SmiteshP/nvim-navic',
+        'MunifTanjim/nui.nvim',
+      },
+--      opts = { lsp = { auto_attach = true } },
+    },
+  },
+
   {'jose-elias-alvarez/null-ls.nvim',
     dependencies = p.plenary,
   },
@@ -69,10 +79,10 @@ local plugins = {
   { p.treesitter,
     build = ':TSUpdate',
   },
-
-  { 'JoosepAlviste/nvim-ts-context-commentstring',
-    dependencies = p.treesitter,
-  },
+  --FIXME: Nice plugin but can't currently use it due to annoying stacktraceback. Can't even find where it's logged to fully/properly read it!
+  -- { 'JoosepAlviste/nvim-ts-context-commentstring',
+    -- dependencies = p.treesitter,
+  -- },
 --]]
   { 'SmiteshP/nvim-navic',
     dependencies = p.lspconfig,
@@ -101,7 +111,21 @@ local plugins = {
   -- Active's Stuff:
   { 'vim-scripts/a.vim', },
   { 'maxbane/vim-asm_ca65', },
-  { 'kana/vim-smartword', },
+  { 'hedyhli/outline.nvim',
+    lazy = true,
+    cmd = {'Outline', 'OutlineOpen' },
+    opts = ActivesStuff.outline
+  },
+  { 'SmiteshP/nvim-navbuddy',
+    dependencies = {
+      'SmiteshP/nvim-navic',
+      'MunifTanjim/nui.nvim',
+    },
+  	config = function()
+      Events.plugin_setup:sub(ActivesStuff.navbuddy)
+    end
+  },
+--  { 'kana/vim-smartword', },
   { 'folke/todo-comments.nvim',
   	dependencies = p.plenary,
   	config = function()
@@ -136,7 +160,7 @@ local plugins = {
     end
   },
   { 'nvim-neo-tree/neo-tree.nvim',
-    branch = "v2.x",
+    -- branch = "v2.x",
     dependencies = {
       p.plenary,
       p.nui,
@@ -149,7 +173,7 @@ local plugins = {
   },
   { 'akinsho/nvim-toggleterm.lua',
     config = function()
-      Events.plugin_setup:sub(Plugins.toggle_term)
+      Events.plugin_setup:sub(ActivesStuff.toggle_term)
     end
   },
   { 'nvim-telescope/telescope-ui-select.nvim',
@@ -158,7 +182,7 @@ local plugins = {
     end
   },
   { 'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
+    -- branch = '0.1.x',
     dependencies = {
       p.plenary,
       { 'nvim-telescope/telescope-fzf-native.nvim',
