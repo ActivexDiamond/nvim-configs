@@ -276,8 +276,8 @@ M.setup_plugins = U.Service(function()
     M.key {'<A-Up>',    '<C-o><C-w>k',   mode = 'i'}
     M.key {'<A-Down>',    '<C-o><C-w>j',   mode = 'i'}
 
-    M.key {'<S-Up>',    '<CMD>lua _scroll_current_buffer(-5)<CR>',   mode = 'i n'}
-    M.key {'<S-Down>',    '<CMD>lua _scroll_current_buffer(5)<CR>',   mode = 'i n'}
+    M.key {'<S-Up>',    '<CMD>lua _scroll_current_buffer(-10)<CR>',   mode = 'i n'}
+    M.key {'<S-Down>',    '<CMD>lua _scroll_current_buffer(10)<CR>',   mode = 'i n'}
 
   if Features:has(FT.CONF, 'mini.nvim') then
     -- mini.bufremove
