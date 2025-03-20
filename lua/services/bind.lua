@@ -272,7 +272,7 @@ M.setup_plugins = U.Service(function()
 	--Force quit without saving anything. Note that: <F16> == <S-F4>
 	M.key { '<F16>', '<CMD>qa!<CR>', mode = 'n i v x t' }
 
-	M.key { '<<CR>>', '@="m`o<C-V><Esc>``"<CR>', mode = 'n v' }
+	-- M.key { '<<CR>>', '@="m`o<C-V><Esc>``"<CR>', mode = 'n v' }
 
 	--Split resizing
 	M.key { '<C-S-lt>', '<CMD>resize -5<CR>', mode = 'n' }
@@ -307,6 +307,12 @@ M.setup_plugins = U.Service(function()
 	M.key { '<C-Down>', function() require 'mini.move'.move_line('down') end, mode = 'i n' }
 	M.key { '<C-Up>', function() require 'mini.move'.move_selection('up') end, mode = 'x' }
 	M.key { '<C-Down>', function() require 'mini.move'.move_selection('down') end, mode = 'x' }
+
+	-- Testing stuff
+	
+	local ls = require 'luasnip'
+
+	M.key { '<C-k>', function() if ls.choice_active() then ls.change_choice(1) end end, mode = 'n i' }
 end)
 --<F16> = <S-F4>
 

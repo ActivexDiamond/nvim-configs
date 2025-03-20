@@ -257,7 +257,7 @@ local plugins = {
 			'hrsh7th/cmp-buffer',
 		},
 		config = function()
-			Events.plugin_setup:sub(Plugins.cmp_ls)
+			Events.plugin_setup:sub(ActivesStuff.cmp_ls)
 		end
 	},
 	{
