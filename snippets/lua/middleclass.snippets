@@ -1,0 +1,20 @@
+snippet obj+super Blank template for middleclass object with a parent.
+snippet obj Blank template for middleclass object with a parent.
+	local middleclass = require "libs.middleclass"
+
+	${LINE_COMMENT}============================ Helper Methods ==============================
+
+	${LINE_COMMENT}============================ Constructor ==============================
+	local {$1:$TM_FILENAME_BASE} = middleclass("$1")
+	function Object:initialize()
+	end
+	${LINE_COMMENT}============================ Core API ==============================
+
+	${LINE_COMMENT}============================ API ==============================
+
+	${LINE_COMMENT}============================ Internals ==============================
+
+	${LINE_COMMENT}============================ Getters / Setters ==============================
+	
+
+snippet obj+super Blank template for middleclass object with a parent.

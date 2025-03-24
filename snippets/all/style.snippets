@@ -1,0 +1,16 @@
+extends lua
+
+snippet header A single comment-header for code-seperation.
+	${LINE_COMMENT}============================ ${1:API} ==============================
+	${2}
+
+snippet header Full-file comment-headers for code-seperation.
+	${LINE_COMMENT}============================ ${1:Helper Methods} ==============================
+
+	${LINE_COMMENT}============================ ${2:Core API} ==============================
+	${6}
+	${LINE_COMMENT}============================ ${3:API} ==============================
+
+	${LINE_COMMENT}============================ ${4:Internals } ==============================
+
+	${LINE_COMMENT}============================ ${5:Getters / Setters } ==============================
