@@ -17,8 +17,22 @@ local actives_theme = {
   ['@injection.content']            = { fg = "#FF00FF" },
   ['@fieldconstructor']             = { fg = "#FF00FF" },
 
+
+  --More generic ones, mostly (fully? not Lua related/relevant.
+  ['@type']             = { fg = "#b44800", bold = true },
+  ['@storageclass']             = { fg = "#422712" },
+  ['@structure']             = { fg = "#d090e5" },
+  ['@typedef']             = { fg = "#0030b4" },
+
+  --factory-lang specific.
+--  ['@factoryTag']             = { fg = "#5e7fdb" },
+  ['factoryExternal']             = { '@repeat' },
+  ['factoryInput']             = { fg = "#518049" },
+  ['factoryProduct']             = { fg = "#ff0071", bold = true},
+  ['factoryDeps']             = { fg = "#8ea3db"},
+
   --Generic, found through testing.
-  ['@error']                        = { undercurl = false },
+  ['@error']                        = { fg = "#a52020", undercurl = false },
   
   --Tested and works
   ['@constant']                     = { fg = "#FF2C60", bold = true },
@@ -40,7 +54,8 @@ local actives_theme = {
   ['@namespace.builtin']            = { fg = "#FF0000" },
 
   ['@string']                       = { fg = "#AA00AA" },
-  ['@number']                       = { fg = "#FF6600" },
+  -- ['@number']                       = { fg = "#FF6600", },
+  ['@number']                       = { fg = "#ff8636", },
 
   ['@comment']                      = { fg = "#005000" },
   ['@comment.documentation']        = { fg = "#FF6600" },
@@ -57,6 +72,8 @@ local actives_theme = {
   ['@operator']                     = { fg = "#FFFFFF" },
   ['@punctuation.delimiter']        = { fg = "#FFFFFF" },
   ['@punctuation.bracket']          = { fg = "#FFFFFF" },
+
+
  
 --  ['@spell']                        = { fg = "#FF0000" },
 

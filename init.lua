@@ -1,6 +1,7 @@
 --- entry point.
 -- @module init
 
+local a = test
 -- all globals must be defined here
 
 U = require 'utils'
@@ -46,3 +47,6 @@ require 'service_loader'
 
 -- invoke enter event on VimEnter
 vim.api.nvim_create_autocmd({ 'VimEnter' }, { callback = Events.enter:wrap() })
+
+--Custom filetypes
+vim.filetype.add({extension = {ln = 'factory'}})
