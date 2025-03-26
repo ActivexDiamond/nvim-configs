@@ -107,6 +107,7 @@ M.setup = U.Service({{FT.LANG, 'setup'}}, {}, function()
   -- treesitter
   if Features:has(FT.PLUGIN, 'nvim-treesitter') then
     require 'nvim-treesitter.configs'.setup {
+	ignore_install = {'org' },
       -- to add more parsers https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
       ensure_installed = M.ts_parsers_ensure_installed,
       highlight = { enable = true },
