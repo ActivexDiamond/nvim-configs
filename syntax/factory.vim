@@ -22,7 +22,7 @@ syntax match repeat "{.*}"
 syntax keyword conditional if
 
 " Language Builtins
-syntax keyword @constant.builtin add subtract equal print passthrough
+syntax keyword @constant.builtin add subtract equal print passthrough nothing
 
 " Literals
 syntax keyword Keyword machine
