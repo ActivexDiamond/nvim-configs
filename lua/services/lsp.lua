@@ -15,8 +15,6 @@ M.setup_lspconfig_server = U.Service({ { FT.PLUGIN, 'nvim-lspconfig' } }, functi
 	local shared_opts = {
 		capabilities = shared_capabilities,
 		handlers = {
-			["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
-			["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' }),
 		},
 		on_attach = function(client, bufnr)
 			-- set gq command to use the lsp formatter for this buffer
@@ -330,8 +328,8 @@ M.setup_servers = U.Service({ { FT.PLUGIN, 'mason.nvim' } }, function(lsp_server
 				root_dir = lspconfig_util.root_pattern('deno.json', 'deno.jsonc')
 			})
 		end,
-		tsserver = function()
-			M.setup_lspconfig_server('tsserver', {
+		ts_ls = function()
+			M.setup_lspconfig_server('ts_ls', {
 				root_dir = lspconfig_util.root_pattern('tsconfig.json', 'jsconfig.json', 'package.json', 'vite.config.ts',
 					'.npmrc'),
 				single_file_support = false,
@@ -466,15 +464,21 @@ M.definition = U.Service(function()
 end)
 
 M.code_action = U.Service(function()
-	vim.lsp.buf.code_action()
+	vim.lsp.buf.code_action(windopts)
 end)
-
+local windopts = {
+		border = 'single',
+		-- max_height = 1000,
+		-- max_width = 1000,
+		-- width = 1000,
+		-- height = 1000,
+}
 M.hover = U.Service(function()
-	vim.lsp.buf.hover()
+	vim.lsp.buf.hover(windopts)
 end)
 
 M.format = U.Service(function()
-	vim.lsp.buf.format()
+	vim.lsp.buf.format(windopts)
 end)
 
 M.diags_list = U.Service(function()

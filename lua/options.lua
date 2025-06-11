@@ -146,3 +146,15 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 	command = "setlocal winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow",
 	group = "HighlightActiveWindow",
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	desc = "Update `path` whenever `cwd` is updated so things like gf work nicely.",
+	group = vim.api.nvim_create_augroup("SyncPathToCwd", { clear = true }),
+	callback = function()
+		local cwd = vim.fn.getcwd()
+		cwd = vim.fn.isdirectory(cwd) and cwd or vim.fn.fnamemodify(cwd, ':h')
+		vim.cmd("set path=" .. cwd .. "/**")	
+	end
+})
+
+

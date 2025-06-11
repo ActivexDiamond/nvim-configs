@@ -116,12 +116,12 @@ local plugins = {
 			Events.plugin_setup:sub(Plugins.rest)
 		end
 	},
-	-- STATUSBAR:
+	--============================ StatusBar ==============================
 	{
 		'rebelot/heirline.nvim',
 		dependencies = p.devicons,
 	},
-	-- Active's Stuff:
+	--============================ Active's Stuff ==============================
 	{ 'vim-scripts/a.vim', },
 	{ 'maxbane/vim-asm_ca65', },
 	{
@@ -154,8 +154,40 @@ local plugins = {
 			Events.plugin_setup:sub(ActivesStuff.autopairs)
 		end
 	},
+	{
+		'MeanderingProgrammer/py-requirements.nvim',
+		dependencies = p.treesitter,
+		config = function()
+			Events.plugin_setup:sub(ActivesStuff.py_requirements)
+		end
+	},
+	{
+		'MeanderingProgrammer/py-requirements.nvim',
+		dependencies = p.treesitter,
+		config = function()
+			Events.plugin_setup:sub(ActivesStuff.py_requirements)
+		end
+	},
+	{
+		'uga-rosa/ccc.nvim',
 
-	-- PLUGINS:
+		opts = function(_, _)
+			return ActivesStuff.ccc_opts()
+		end
+	},
+	{
+		'MeanderingProgrammer/render-markdown.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+			-- 'nvim-tree/nvim-web-devicons',
+			'echasnovski/mini.nvim',
+		},
+		config = function()
+			Events.plugin_setup:sub(ActivesStuff.render_markdown)
+		end
+	},
+
+	--============================ Other ==============================
 	{
 		'echasnovski/mini.nvim',
 		config = function()
@@ -229,12 +261,6 @@ local plugins = {
 		dependencies = 'anuvyklack/keymap-amend.nvim',
 		config = function()
 			Events.plugin_setup:sub(Plugins.fold_preview)
-		end
-	},
-	{
-		'NvChad/nvim-colorizer.lua',
-		config = function()
-			Events.plugin_setup:sub(Plugins.colorizer)
 		end
 	},
 	{

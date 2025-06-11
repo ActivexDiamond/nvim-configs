@@ -1,7 +1,6 @@
 local M = {}
 
 M.setup = U.Service(function()
-	--TODO: Figure out what this does.
 	Events.plugin_setup()
 end)
 
@@ -54,6 +53,10 @@ M.outline = {
 		auto_preview = true,
 		open_hover_on_preview = true, --Doesn't seem to work?
 		live = true,
+		relative_width = false,
+		width = 120,
+		height = 95,
+		border = 'double',
 	},
 	keymaps = {
 		close = '<escape>',
@@ -302,6 +305,8 @@ M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
 			},
 			documentation = {
 				border = 'single',
+				max_width = 0,
+				max_height = 0,
 				winhighlight = '',
 			},
 			-- scrollbar = '║',
@@ -339,5 +344,111 @@ M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
 	})
 end)
 
+M.py_requirements = U.Service({ { FT.CONF, "py-requirements.nvim" } }, {}, function()
+	require('py-requirements').setup({})
+end)
+
+--FIXME: This causes a stackoverflow. Seems to have to do with ccc.setup trying to init an lsp for ts_ls or something?
+-- M.ccc = U.Service({ { FT.CONF, "ccc.nvim" } }, {}, function()
+function M.ccc_opts()
+	local ccc = require('ccc')
+
+	local opts = {
+		preserve = true,
+		-- point_char = 'O',
+		default_color = "#7f7f7f",
+		mappings = {
+			['<right>'] = ccc.mapping.increase1,
+			['<S-right>'] = ccc.mapping.increase5,
+			['<C-right>'] = ccc.mapping.increase10,
+			['<left>'] = ccc.mapping.decrease1,
+			['<S-left>'] = ccc.mapping.decrease5,
+			['<C-left>'] = ccc.mapping.decrease10,
+			['<C-S-right>'] = ccc.mapping.set100,
+			['<C-S-left>'] = ccc.mapping.set0,
+		},
+		pickers = {
+			ccc.picker.hex,
+			ccc.picker.css_rgb,
+			ccc.picker.css_hsl,
+			ccc.picker.css_hwb,
+			ccc.picker.css_lab,
+			ccc.picker.css_lch,
+			ccc.picker.css_oklab,
+			ccc.picker.css_oklch,
+			ccc.picker.ansi_escape(),
+		},
+		highlighter = {
+			auto_enable = true,
+		}
+	}
+
+	--Draw big colored rect next to it. Gotten from: https://github.com/uga-rosa/ccc.nvim/issues/13
+	do
+		local id = "ccc-preview"
+		local ns = vim.api.nvim_create_namespace(id)
+		local pwin
+		vim.api.nvim_create_autocmd("User", {
+			desc = id,
+			pattern = "CccColorChanged",
+			group = vim.api.nvim_create_augroup(id, { clear = true }),
+			callback = function(event)
+				if vim.g.ccc_color == "" then return end
+
+				if not pwin then
+					local cwin = vim.fn.win_findbuf(event.buf)[1]
+
+					local pbuf = vim.api.nvim_create_buf(false, true)
+					vim.api.nvim_set_option_value("modifiable", false, { buf = pbuf })
+					vim.api.nvim_set_option_value("buftype", "nofile", { buf = pbuf })
+					vim.api.nvim_set_option_value("filetype", "ccc-preview", { buf = pbuf })
+
+					pwin = vim.api.nvim_open_win(pbuf, false, {
+						relative = "win",
+						win = cwin,
+
+						row = -2,
+						col = vim.api.nvim_win_get_width(cwin) + 1,
+
+						width = 12,
+						height = 5,
+
+						border = "rounded",
+						style = "minimal",
+						focusable = false,
+					})
+					local closeColorWindow = {
+						pattern = tostring(cwin),
+						once = true,
+						callback = function()
+							vim.api.nvim_buf_delete(pbuf, { force = true })
+							vim.api.nvim_win_close(vim.fn.win_getid(pwin), true)
+							pwin = nil
+						end,
+					}
+					--FIXME: Color window lingers around if CccPick loses focus instead of confirming/closing.
+					vim.api.nvim_create_autocmd("WinClosed", closeColorWindow)
+					-- vim.api.nvim_create_autocmd("WinLeave", closeColorWindow)
+				end
+
+				vim.api.nvim_set_hl(ns, "NormalFloat", { bg = vim.g.ccc_color })
+				vim.api.nvim_win_set_hl_ns(pwin, ns)
+			end,
+		})
+	end
+	return opts
+end
+
+M.render_markdown = U.Service({ { FT.CONF, "render-markdown.nvim" } }, {}, function()
+	require("render-markdown").setup({
+		completions = { lsp = { enabled = true } },
+		render_modes = { 'i', 'n', 't' },
+		debounce = 0,
+		heading = {
+			position = 'inline',
+			left_pad = 0.499,
+		}
+	})
+end)
 
 return M

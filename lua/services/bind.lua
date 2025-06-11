@@ -32,7 +32,7 @@ M.setup = U.Service(function()
 	-- M.key {'<A-c>',             function() vim.cmd.bdelete() end, mode = 'n v i'}
 	--  M.key {'<C-q>',             function() vim.cmd.quitall() end, mode = 'n x i'}
 	-- spell
-	M.key { '<leader>s', Lang.toggle_spell }
+	M.key { '<leader>`a', Lang.toggle_spell }
 	-- M.key {'<C-a>',            ':%'}
 	-- quick fix list
 	-- M.key {'<S-Up>',            '<CMD>cprevious<CR>'}
@@ -115,7 +115,7 @@ M.setup_plugins = U.Service(function()
 
 	M.key { '<leader>a', Lsp.hover }
 	M.key { '<leader>d', Lsp.references }
-	M.key { '<leader>D', Lsp.definition }
+	M.key { '<leader>s', Lsp.definition }
 
 	M.key { '<leader>c', Lsp.code_action }
 	M.key { '<leader>v', Lsp.diags_list }
@@ -125,6 +125,10 @@ M.setup_plugins = U.Service(function()
 	M.key { '<leader>]', '<CMD>OutlineOpen<CR>' }
 	M.key { '<C-space>', '<CMD>OutlineFocus<CR>', mode = 'n i v' }
 
+	M.key { '<leader>b', '<C-W>vgF<C-W><C-P><CMD>close<CR>'}
+
+
+	M.key { '<leader>3', '<CMD>CccPick<CR>' }
 
 	M.key { '<leader>l', '<CMD>lua _toggle_lazygit_term()<CR>' }
 	M.key { '<C-l>', '<CMD>lua _toggle_current_project_run_sh_term()<CR>', mode = 'n i v' }
@@ -142,7 +146,7 @@ M.setup_plugins = U.Service(function()
 	M.key { '<C-e>', function() telescope.buffers { ignore_current_buffer = true, sort_mru = true, } end, mode = 'i n v' }
 
 	if Features:has(FT.CONF, 'neo-tree.nvim') then
-		M.key { '<C-a>', '<ESC><CMD>Neotree<CR>', mode = 'i n' }
+		M.key { '<C-a>', '<ESC><CMD>Neotree float<CR>', mode = 'i n' }
 	end
 
 	if Features:has(FT.CONF, 'fold-cycle.nvim') then
@@ -189,7 +193,7 @@ M.setup_plugins = U.Service(function()
 			-- TODO: find a better way to switch back to normal mode
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 't', false)
 		end, mode = 'v' }
-		M.key { 'gu', '<CMD>Gitsigns undo_stage_hunk<CR>' }
+		M.key { 'gu', '<CMD>Gitsigns undo_stage_unk<CR>' }
 		M.key { 'g<Left>', '<CMD>Gitsigns prev_hunk<CR>zz' }
 		M.key { 'g<Right>', '<CMD>Gitsigns next_hunk<CR>zz' }
 	end
@@ -202,7 +206,7 @@ M.setup_plugins = U.Service(function()
 	end
 
 	-- neotest
-	M.key { '<leader>\\', '<CMD>Neotree toggle<CR>' }
+	-- M.key { '<leader>\\', '<CMD>Neotree <CR>' } 
 
 	if Features:has(FT.CONF, 'vim-illuminate') then
 		M.key { 'r<Right>', function() require('illuminate').goto_next_reference() end }
