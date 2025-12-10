@@ -186,6 +186,12 @@ local plugins = {
 			Events.plugin_setup:sub(ActivesStuff.render_markdown)
 		end
 	},
+	{
+		'gennaro-tedesco/nvim-peekup',
+		config = function()
+			Events.plugin_setup:sub(ActivesStuff.nvim_peekup)
+		end
+	},
 
 	--============================ Other ==============================
 	{

@@ -452,4 +452,9 @@ M.render_markdown = U.Service({ { FT.CONF, "render-markdown.nvim" } }, {}, funct
 	})
 end)
 
+M.nvim_peekup = U.Service({ { FT.CONF, "nvim-peekup" } }, {}, function()
+	local config = require("nvim-peekup.config")
+	config.on_keystroke["delay"] = ""
+end)
+
 return M
