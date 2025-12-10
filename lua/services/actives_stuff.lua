@@ -85,7 +85,8 @@ M.outline = {
 
 M.toggle_term = U.Service({ { FT.CONF, "toggleterm.nvim" } }, {}, function()
 	require 'toggleterm'.setup {
-		open_mapping = '<C-m>',
+		--FIXME: This should go to lua/services/bind.lua
+		open_mapping = '<C-M>',
 
 		insert_mappings = true,
 		terminal_mappings = true,
