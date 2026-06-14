@@ -33,29 +33,18 @@ M.setup = U.Service(function()
 	--  M.key {'<C-q>',             function() vim.cmd.quitall() end, mode = 'n x i'}
 	-- spell
 	M.key { '<leader>`a', Lang.toggle_spell }
-	-- M.key {'<C-a>',            ':%'}
-	-- quick fix list
-	-- M.key {'<S-Up>',            '<CMD>cprevious<CR>'}
-	-- M.key {'<S-Down>',          '<CMD>cnext<CR>'}
-	-- filter
-	-- M.key {'==',                '==_'}
-	-- M.key {'=',                 '=gv_', mode = 'x'}
-	-- switch between last 2 windows
-	-- M.key {'<leader>y',           '<C-w>p'}
-	-- make x delete without copying
-	-- M.key {'x',                '"_x', mode = 'x n'}
-	M.key { 'X', '"_x', mode = 'x n' }
+	
+--	M.key { 'X', '"_x', mode = 'x n' }
 	-- preserve cursor position after a yank
-	M.key { 'y', "ygv<ESC>", mode = 'x' }
+--	M.key { 'y', "ygv<ESC>", mode = 'x' }
 	-- make Y copy to end of line in normal mode
-	M.key { 'Y', 'y$' }
+--	M.key { 'Y', 'y$' }
 	-- copy and retain visual selection in visual mode
-	M.key { 'Y', 'ygv', mode = 'x' }
+--	M.key { 'Y', 'ygv', mode = 'x' }
 	-- go to end after a join
-	M.key { 'J', 'J$' }
+--	M.key { 'J', 'J$' }
 	-- split (opposite of J)
-	M.key { 'S', 'T hr<CR>k$' }
-	-- swap # and *
+--	M.key { 'S', 'T hr<CR>k$' }
 
 
 	-- open man pages in new tabs
@@ -102,14 +91,7 @@ M.setup = U.Service(function()
 	-- M.key {'<A-Up>',           '<CMD>m .-2<CR><ESC>i', mode = 'i'}
 end)
 
--- TODO load each conditionally depending on registered features
 M.setup_plugins = U.Service(function()
-	-- Builtins
-	-- open uri under cursor
-	M.key { 'gx', OpenURIUnderCursor }
-	-- plugin manager sync
-	--  M.key {'<leader>p',         PluginManager.sync }
-
 	-- lsp
 	M.key { '<leader>r', Lsp.rename }
 
@@ -132,8 +114,12 @@ M.setup_plugins = U.Service(function()
 
 	M.key { '<leader>l', '<CMD>lua _toggle_lazygit_term()<CR>' }
 	M.key { '<C-l>', '<CMD>lua _toggle_current_project_run_sh_term()<CR>', mode = 'n i v' }
-	M.key { '<C-;>', '<CMD>lua _quickrun_current_project_run_sh_term()<CR>', mode = 'n i v' }
+	--FIXME: Temporary fix until I fix my terminal not showing C-;
+	--M.key { '<C-;>', '<CMD>lua _quickrun_current_project_run_sh_term()<CR>', mode = 'n i v' }
+	M.key { '<C-J>', '<CMD>lua _quickrun_current_project_run_sh_term()<CR>', mode = 'n i v' }
 
+	--TODO: Find a better keybind for this.
+	M.key { '<leader>R', '<CMD>set relativenumber!<CR>' }
 	--These don't seem to work, in Lua at least.
 	--  M.key {'<leader>D',         Lsp.toggle_diags }
 
@@ -203,6 +189,7 @@ M.setup_plugins = U.Service(function()
 		M.key { '<leader>f', '<CMD>Telescope find_files<CR>' }
 		M.key { '<leader>g', '<CMD>Telescope live_grep<CR>' }
 		M.key { '<leader>t', '<CMD>Telescope<CR>' }
+		M.key { '<leader>m', '<CMD>Telescope notify<CR>' }
 	end
 
 	-- neotest
@@ -220,10 +207,12 @@ M.setup_plugins = U.Service(function()
 	M.key { '<C-d>', '<C-o>"_dd', mode = 'i v' }
 	M.key { '<C-d>', '"_dd', mode = 'n' }
 
+	--TODO: Get a new/different c/cpp file hopper, or use clangd's builtin commands for it.
+
 	--if Features:has(FT.CONF, 'a.vim') then
-	M.key { '<C-x>', '<CMD>A<CR>', mode = 'n i v' }  --x for eXtension (c/h/hpp/cpp/etc...)
-	M.key { 'xb', '<CMD>A<CR>', mode = 'n' }         --b for Buffer.
-	M.key { 'xv', '<CMD>AV<CR>', mode = 'n' }        --for Vsplit.
+--	M.key { '<C-x>', '<CMD>A<CR>', mode = 'n i v' }  --x for eXtension (c/h/hpp/cpp/etc...)
+--	M.key { 'xb', '<CMD>A<CR>', mode = 'n' }         --b for Buffer.
+--	M.key { 'xv', '<CMD>AV<CR>', mode = 'n' }        --for Vsplit.
 	--end
 
 	--Smartword mappings.
@@ -241,8 +230,9 @@ M.setup_plugins = U.Service(function()
 	-- word/WORD DELETION
 
 	--Delete the word before the cursor, while preserving your mode and set to "b register.
-	M.key { '<C-w>', '<C-o>"bdb', mode = 'i' }
-	M.key { '<C-w>', '"bdb', mode = 'n' }
+	--FIXME: This in particular is broken. But also, all of these "custom fancy motion" commmands are either broken, or a bad habit in the first place.
+--	M.key { '<C-w>', '<C-o>"bdb', mode = 'i' }
+	M.key { '<C-w>', 'db', mode = 'n' }			--Temporarily disabled "b.
 
 	--Delete the word after the cursor, while preserving your mode and set to "w register. (Opposite of the CTRL-w)
 	M.key { '<C-Bslash>', '<C-o>"wdw', mode = 'i' }
