@@ -1,16 +1,22 @@
-extends lua
 
-snippet header A single comment-header for code-seperation.
+snippet hd A single comment-header for code-seperation.
 	${LINE_COMMENT}============================ ${1:API} ==============================
-	${2}
+	${0}
 
-snippet header Full-file comment-headers for code-seperation.
+snippet hd-long Full-file comment-headers for code-seperation.
 	${LINE_COMMENT}============================ ${1:Helper Methods} ==============================
 
 	${LINE_COMMENT}============================ ${2:Core API} ==============================
-	${6}
+	${0}
 	${LINE_COMMENT}============================ ${3:API} ==============================
 
 	${LINE_COMMENT}============================ ${4:Internals } ==============================
 
 	${LINE_COMMENT}============================ ${5:Getters / Setters } ==============================
+
+snippet credit In-file credit, should be placed at the start of a file.
+	${LINE_COMMENT}Author:    $EXTRAS_AUTHOR_VERBOSE_NAME
+	${LINE_COMMENT}Year:      (C) `strftime('%Y')`
+	${LINE_COMMENT}File:      $TM_FILENAME
+
+	${0}

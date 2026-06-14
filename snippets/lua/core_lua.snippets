@@ -1,7 +1,20 @@
-snippet asdastest try out some stuff
-	hello
-	do thuis
-	thing
+snippet rq Require a module, with a particular path.
+	local ${1:filename} = require "$2$1"
+	$0
 
 
-snippet anotherone asdas
+snippet rq-lib Require a module, from the lib directory.
+	local ${1:filename} = require "libs.$1"
+	$0
+
+
+snippet md Blank module.
+	local ${1:$TM_FILENAME_BASE} = {}
+	
+	function $1.${2:funcName}($3)
+		$0
+	end
+
+	return $1
+
+

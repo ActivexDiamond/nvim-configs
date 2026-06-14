@@ -1,0 +1,40 @@
+snippet prot-class-simple A simple in-place class implementation. No inheritance, minimal features, etc...
+	local $TM_FILENAME_BASE = {static = {}}
+
+	--============================ Constructor ==============================
+
+	function $TM_FILENAME_BASE:new()
+		local instance = setmetatable({class = $TM_FILENAME_BASE}, $TM_FILENAME_BASE)
+		$0
+		return instance
+	end
+
+	--============================ Core API ==============================
+
+	function $TM_FILENAME_BASE:update(dt)
+	end
+
+	function $TM_FILENAME_BASE:draw(g2d)
+	end
+
+	--============================ Minimal Class API ==============================
+
+	setmetatable($TM_FILENAME_BASE, $TM_FILENAME_BASE)
+	$TM_FILENAME_BASE.__call = $TM_FILENAME_BASE.new
+
+	function $TM_FILENAME_BASE:__index(k)
+		if self == $TM_FILENAME_BASE then
+			return $TM_FILENAME_BASE.static[k]
+		else
+			return rawget($TM_FILENAME_BASE, k)
+		end
+	end
+
+	function $TM_FILENAME_BASE:__tostring()
+		if self == $TM_FILENAME_BASE then return "<Class: $TM_FILENAME_BASE>"
+		else return "<Instance of class: $TM_FILENAME_BASE>" end
+	end
+
+	return $TM_FILENAME_BASE
+
+

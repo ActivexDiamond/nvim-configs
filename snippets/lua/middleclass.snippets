@@ -1,20 +1,65 @@
-snippet obj+super Blank template for middleclass object with a parent.
-snippet obj Blank template for middleclass object with a parent.
+snippet obj Blank template for a middleclass base object.
 	local middleclass = require "libs.middleclass"
 
-	${LINE_COMMENT}============================ Helper Methods ==============================
+	--============================ Helper Methods ==============================
 
-	${LINE_COMMENT}============================ Constructor ==============================
-	local {$1:$TM_FILENAME_BASE} = middleclass("$1")
-	function Object:initialize()
+	--============================ Constructor ==============================
+
+	---@class $1 : Middleclass
+	---@overload fun(): self
+	local ${1:$TM_FILENAME_BASE} = middleclass("$1")
+
+	function $1:initialize()
+		$0
 	end
-	${LINE_COMMENT}============================ Core API ==============================
 
-	${LINE_COMMENT}============================ API ==============================
+	--============================ Core API ==============================
 
-	${LINE_COMMENT}============================ Internals ==============================
+	function $1:update(dt)
+	end
 
-	${LINE_COMMENT}============================ Getters / Setters ==============================
+	function $1:draw(g2d)
+	end
+
+	--============================ API ==============================
+
+	--============================ Internals ==============================
+
+	--============================ Getters / Setters ==============================
 	
-
+	return $1
+	
 snippet obj+super Blank template for middleclass object with a parent.
+	local middleclass = require "libs.middleclass"
+	local ${1:super} = require "$2$1"
+
+	--============================ Helper Methods ==============================
+
+	--============================ Constructor ==============================
+
+	---@class $3 : $1
+	---@overload fun(): self
+	local ${3:$TM_FILENAME_BASE} = middleclass("$3", $1)
+		
+	function $3:initialize($4)
+		$1.initialize(self, ${5:$4})
+		$0
+	end
+
+	--============================ Core API ==============================
+
+	function $3:update(dt)
+		$1.update(self, dt)
+	end
+
+	function $3:draw(g2d)
+		$1.draw(self, g2d)
+	end
+
+	--============================ API ==============================
+
+	--============================ Internals ==============================
+
+	--============================ Getters / Setters ==============================
+	
+	return $3

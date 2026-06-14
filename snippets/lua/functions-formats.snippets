@@ -1,0 +1,30 @@
+snippet fn Plain function
+	local function ${1:funcName}($2)
+		$0
+	end
+
+
+snippet fn-l Lambda (nameless) function.
+	function($1)
+		$0
+	end
+
+
+snippet fn-m Module function..
+	function $TM_FILENAME_BASE.${2:methodName}($3)
+		$0
+	end
+
+
+snippet mt Object method.
+	function $TM_FILENAME_BASE:${2:methodName}($3)
+		$0
+	end
+
+
+snippet mt-s Static method.
+	function $TM_FILENAME_BASE.static:${2:methodName}($3)
+		$0
+	end
+
+
