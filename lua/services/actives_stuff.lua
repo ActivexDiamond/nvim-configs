@@ -1,8 +1,40 @@
 local M = {}
 
+--============================ Global Events ==============================
+Events.enter:sub(function()
+	--Update working directory on launch. Useful when calling nvim from a far-away directory.
+--    local pwd = vim.fn.getcwd()
+--    vim.api.nvim_set_current_dir(pwd)	vim.cmd("ch %:h")
+end)
+
 M.setup = U.Service(function()
 	Events.plugin_setup()
 end)
+
+--============================ Minor / Minimal-Config Plugins ==============================
+M.render_markdown = U.Service({ { FT.CONF, "render-markdown.nvim" } }, {}, function()
+	require("render-markdown").setup({
+		completions = { lsp = { enabled = true } },
+		render_modes = { 'i', 'n', 't' },
+		debounce = 0,
+		heading = {
+			position = 'inline',
+			left_pad = 0.499,
+		}
+	})
+end)
+
+M.nvim_peekup = U.Service({ { FT.CONF, "nvim-peekup" } }, {}, function()
+	local config = require("nvim-peekup.config")
+	config.on_keystroke["delay"] = ""
+end)
+
+vim.cmd([[
+	filetype plugin indent on
+	augroup filetypedetect
+    	au BufNewFile,BufRead *.asm,*.inc set ft=asm_ca65
+	augroup END
+]])
 
 M.a_vim = U.Service({ { FT.CONF, 'a.vim' } }, {}, function()
 end)
@@ -20,6 +52,43 @@ M.todo_comments = U.Service({ { FT.CONF, 'todo-comments' } }, {}, function()
 	}
 end)
 
+--============================ Global Functions ==============================
+--A leading underscore means it is intended to be used through a keybind; not directly in the editor / CMD window.
+function _scroll_current_buffer(n)
+	local cur = vim.api.nvim_win_get_cursor(0)
+	local curY, curX = cur[1], cur[2]
+	local targetY = math.min(math.max(1, curY + n), vim.api.nvim_buf_line_count(0))
+	vim.api.nvim_win_set_cursor(0, { [1] = targetY, [2] = curX })
+	-- vim.api.nvim_win_set_cursor(0, {[1] = 100, [2] = 5})
+end
+
+--============================ User Commands ==============================
+function toggle_virtual_lines_for_diagnostics()
+	local current = vim.diagnostic.config().virtual_lines
+	vim.diagnostic.config({virtual_lines = not current})
+end
+vim.api.nvim_create_user_command("Tvd", toggle_virtual_lines_for_diagnostics,
+		{desc="Toggles virtual lines being used to display diagnostics."})
+
+--============================ nvim-skel ==============================
+M.skel_nvim = U.Service({ { FT.CONF, 'skel-nvim' } }, {}, function()
+	require("skel-nvim").setup{
+		skel_enabled = false,
+		apply_skel_for_empty_file = false,
+
+		mappings = {
+			['*.*'] = "short_credit.skel",
+
+			--TODO: Templates for many different file types.
+			--['*.lua']   = "lua.skel",
+
+			--FIXME: My config seems to break skel's multi-option templplates.	
+			--['LICENSE'] = {"license.mit.skel", "license.gpl.skel" }
+		}
+	}
+end)
+
+	--============================ nvim-navbuddy ==============================
 M.navbuddy = U.Service({ { FT.CONF, 'navbuddy' } }, {}, function()
 	local actions = require("nvim-navbuddy.actions")
 	require 'nvim-navbuddy'.setup {
@@ -43,6 +112,7 @@ M.navbuddy = U.Service({ { FT.CONF, 'navbuddy' } }, {}, function()
 	}
 end)
 
+--============================ outline.nvim ==============================
 --FIXME: For some reason this one doesn't work with Venom's config system.
 M.outline = {
 	outline_window = {
@@ -74,19 +144,23 @@ M.outline = {
 	},
 	symbols = {
 		filter = {
-			lua = { 'Variable', exclude = true }
+			lua = {'Variable', exclude = true},
+			html = {'Property', 'Variable', 'Field', 'Class', exclude = true},
 		},
 	},
 }
---M.outline = U.Service({{FT.CONF, 'outline'}}, {}, function()
---	require 'outline'.setup{
---	}
---end)
+--FIXME: Make Outline open at the correct time.
+--vim.api.nvim_create_autocmd({ "BufEnter" }, {
+--	callback = function()
+--		vim.cmd("OutlineOpen")
+--	end,
+--})
 
+--============================ toggleterm.nvim ==============================
 M.toggle_term = U.Service({ { FT.CONF, "toggleterm.nvim" } }, {}, function()
 	require 'toggleterm'.setup {
 		--FIXME: This should go to lua/services/bind.lua
-		open_mapping = '<C-M>',
+		open_mapping = '<leader>\\',
 
 		insert_mappings = true,
 		terminal_mappings = true,
@@ -127,9 +201,10 @@ M.toggle_term = U.Service({ { FT.CONF, "toggleterm.nvim" } }, {}, function()
 	})
 	function _toggle_lazygit_term() lazygit:toggle() end
 
+	local runnerPath = vim.fn.findfile("run.sh", ";")
 	local shouldResetState
 	local current_project_run_sh = Terminal:new({
-		cmd = '../run.sh',
+		cmd = ("cd $(dirname %s) && echo $PWD && %s && exit"):format(runnerPath, runnerPath),
 		hidden = true,
 		display_name = 'Project Runner',
 		direction = 'float',
@@ -172,23 +247,8 @@ M.toggle_term = U.Service({ { FT.CONF, "toggleterm.nvim" } }, {}, function()
 	end
 end)
 
-vim.cmd([[
-	filetype plugin indent on
-	augroup filetypedetect
-    	au BufNewFile,BufRead *.asm,*.inc set ft=asm_ca65
-	augroup END
-]])
-
-function _scroll_current_buffer(n)
-	local cur = vim.api.nvim_win_get_cursor(0)
-	local curY, curX = cur[1], cur[2]
-	local targetY = math.min(math.max(1, curY + n), vim.api.nvim_buf_line_count(0))
-	vim.api.nvim_win_set_cursor(0, { [1] = targetY, [2] = curX })
-	-- vim.api.nvim_win_set_cursor(0, {[1] = 100, [2] = 5})
-end
-
+--============================ nvim-cmp ==============================
 M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
-	-- TODO: conditionally load luasnip realted stuff depending on features (requries plugin manager dependency feature registering)
 	local ls = require 'luasnip'
 	local ls_types = require 'luasnip.util.types'
 	local luasnip = require 'luasnip'
@@ -204,6 +264,17 @@ M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
 			}
 		},
 	})
+
+	--TODO: Factor out LuaSnip configs into it's own function.
+	ls.env_namespace("EXTRAS", {vars = {
+		AUTHOR_REAL_NAME = "Dulfiqar H. Al-Safi",
+		AUTHOR_USERNAME = "Active Diamond",
+		AUTHOR_VERBOSE_NAME = "Dulfiqar 'Active Diamond' H. Al-Safi",
+		RANDOM = function() return math.random() end,
+	}})
+	--This can be indexed by any string, and will automatically check the OS ENV for it.
+	--Example: $SYS_USER or $SYS_HOME
+	ls.env_namespace("SYS", {vars=os.getenv})
 
 	-- require("luasnip.loaders.from_snipmate").lazy_load({paths = "~/.config/nvim/snips"})
 	require("luasnip.loaders.from_snipmate").load()
@@ -247,7 +318,11 @@ M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
 						luasnip.jump(1)
 					end
 				else
-					fallback()
+					--FIXME: Is this what sometimes breaks newlines?
+					--fallback()
+
+					--Temp fix, seeems to break other stuff.
+					cmp.close(); fallback()
 				end
 			end, { "i", "s" }),
 
@@ -345,10 +420,7 @@ M.cmp_ls = U.Service({ { FT.CONF, "nvim-cmp" } }, {}, function()
 	})
 end)
 
-M.py_requirements = U.Service({ { FT.CONF, "py-requirements.nvim" } }, {}, function()
-	require('py-requirements').setup({})
-end)
-
+--============================ ccc.nvim ==============================
 --FIXME: This causes a stackoverflow. Seems to have to do with ccc.setup trying to init an lsp for ts_ls or something?
 -- M.ccc = U.Service({ { FT.CONF, "ccc.nvim" } }, {}, function()
 function M.ccc_opts()
@@ -439,22 +511,5 @@ function M.ccc_opts()
 	end
 	return opts
 end
-
-M.render_markdown = U.Service({ { FT.CONF, "render-markdown.nvim" } }, {}, function()
-	require("render-markdown").setup({
-		completions = { lsp = { enabled = true } },
-		render_modes = { 'i', 'n', 't' },
-		debounce = 0,
-		heading = {
-			position = 'inline',
-			left_pad = 0.499,
-		}
-	})
-end)
-
-M.nvim_peekup = U.Service({ { FT.CONF, "nvim-peekup" } }, {}, function()
-	local config = require("nvim-peekup.config")
-	config.on_keystroke["delay"] = ""
-end)
 
 return M
