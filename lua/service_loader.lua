@@ -122,7 +122,8 @@ local plugins = {
 		dependencies = p.devicons,
 	},
 	--============================ Active's Stuff ==============================
-	{ 'vim-scripts/a.vim', },
+--FIXME: Plugins is broken. Find a better one or use clangd's builtin commmands.
+--	{ 'vim-scripts/a.vim', },
 	{ 'maxbane/vim-asm_ca65', },
 	{
 		'hedyhli/outline.nvim',
@@ -192,7 +193,16 @@ local plugins = {
 			Events.plugin_setup:sub(ActivesStuff.nvim_peekup)
 		end
 	},
-
+	{
+		'rcarriga/nvim-notify',
+		config = function()
+			Events.plugin_setup:sub(Plugins.notify)
+		end
+	},
+	{
+		--TODO: Configure this.
+		'tpope/vim-commentary'
+	},
 	--============================ Other ==============================
 	{
 		'echasnovski/mini.nvim',
