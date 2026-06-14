@@ -1,6 +1,5 @@
 --- entry point.
 -- @module init
-
 local a = test
 -- all globals must be defined here
 
@@ -28,7 +27,7 @@ Icons = {
 	debugging = icon_sets.ui.codicons,
 }
 
---- feature types enum
+--Feature types enum.
 FT = {
 	PLUGIN = "PLUGIN",
 	CONF = "CONF",
@@ -38,15 +37,26 @@ FT = {
 	SESSION = "SESSION",
 }
 
--- initializing logger
+--Initializing logger.
 log = require 'logger'.log
 
--- Loading Modules
+--Loading Modules.
 require 'options'
 require 'service_loader'
 
--- invoke enter event on VimEnter
+--Invoke enter event on VimEnter.
 vim.api.nvim_create_autocmd({ 'VimEnter' }, { callback = Events.enter:wrap() })
 
---Custom filetypes
+--Custom filetypes.
 vim.filetype.add({extension = {ln = 'factory'}})
+
+--autochdir, but only on first run, NOT on every buffer change.
+do
+	local firstArg = vim.fn.argv()[1]
+	--If a directory was passed, cd to it.
+	if vim.fn.isdirectory(firstArg) ~= 0 then
+		vim.cmd("cd " .. firstArg)
+	else --If a file was passed, extract the path to it's directory instead, and cd to it.
+		vim.cmd("cd %:p:h")
+	end
+end

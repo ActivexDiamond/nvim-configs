@@ -115,9 +115,12 @@ M.notify = U.Service({ { FT.CONF, "nvim-notify" } }, {}, function()
 	local notify = require 'notify'
 
 	notify.setup {
-		timeout = 1000,
-		render = 'minimal',
-		-- stages = 'static',
+		timeout = 2000,
+		render = 'wrapped-compact',
+		stages = 'static',
+		top_down = true,
+		merge_duplicates = false,
+		minimum_width = 0,
 	}
 
 	vim.notify = notify
@@ -236,15 +239,6 @@ M.neo_tree = U.Service({ { FT.CONF, "neo-tree.nvim" } }, {}, function()
 			},
 		},
 		nesting_rules = {
-			-- js = { 'js.map', 'd.ts' },
-			-- ['+layout.svelte'] = { '+layout.js', '+layout.ts', '+layout.server.js', '+layout.server.js' },
-			-- ['+page.svelte'] = { '+page.js', '+page.ts', '+page.server.js', '+page.server.js' },
-
-			-- ["js"] = { "js.map" },
-			-- ['svelte'] = { 'svelte.js', 'svelte.ts' },
-			-- ['*.svelte'] = { '*.js', '*.ts', '*.svelte.ts' },
-
-			-- ['+page.svelte'] = { '+page.js', '+page.ts', '+page.server.js', '+page.server.js' },
 		},
 		filesystem = {
 			hijack_netrw_behavior = 'open_current',
@@ -260,7 +254,7 @@ M.neo_tree = U.Service({ { FT.CONF, "neo-tree.nvim" } }, {}, function()
 				},
 				hide_by_pattern = {
 					-- "*.import"
-					"*.luarc.*", "LICENSE*", "README*", "*.buildpath", "*.project", "*.travis.*"
+--					"*.luarc.*", "LICENSE*", "README*", "*.buildpath", "*.project", "*.travis.*"
 				},
 				never_show = {
 				},
@@ -330,19 +324,37 @@ M.neo_tree = U.Service({ { FT.CONF, "neo-tree.nvim" } }, {}, function()
 			-- statusline = true,
 		},
 
-		event_handlers = { {
-			event = "neo_tree_buffer_enter",
-			handler = function()
-				-- TODO: fix this!
-				-- vim.cmd "highlight Cursor guibg=red guifg=green gui=reverse"
-				-- vim.o.guicursor = "a:block-blockon100-Cursor/Cursor"
-
-				vim.o.guicursor = "a:noCursor"
-			end
-		}, {
-			event = "neo_tree_buffer_leave",
-			handler = function() vim.o.guicursor = "a:hor25,v:block,i:ver25" end
-		} },
+		event_handlers = {
+			{
+				event = "file_added",
+				handler = function(path)
+					vim.notify("[NeoTree/file_added] Path: " .. path)
+					local filetype = vim.filetype.match({filename = path})
+					vim.notify("[NeoTree/file_added] Filetype: " .. (filetype or "not found"))
+					if vim.fn.isdirectory(path) ~= 0 then return end
+					local f, err = io.open(path, 'a')
+					if not f then
+						vim.notify("Couldn't open file to fill with skeleton snippet. Error: " .. err)
+					end
+					local skeleton_snips = require("services.skeleton_snips")
+					local snip = skeleton_snips.get_snippet_with_prompt(filetype or "all")
+					local str = skeleton_snips.expand(snip, path)
+					f:write(str)
+					f:close()
+				end
+			},{
+				event = "neo_tree_buffer_enter",
+				handler = function()
+					-- TODO: fix this!
+					-- vim.cmd "highlight Cursor guibg=red guifg=green gui=reverse"
+					-- vim.o.guicursor = "a:block-blockon100-Cursor/Cursor"
+					vim.o.guicursor = "a:noCursor"
+				end
+			},{
+				event = "neo_tree_buffer_leave",
+				handler = function() vim.o.guicursor = "a:hor25,v:block,i:ver25" end
+			}
+		},
 	}
 	Events.session_write_pre:sub [[NeoTreeClose]]
 end)
@@ -367,32 +379,6 @@ M.bufferline = U.Service({ { FT.CONF, 'bufferline.nvim' } }, {}, function()
 				{ filetype = "neo-tree" },
 			},
 		},
-	}
-end)
-
-M.toggle_term = U.Service({ { FT.CONF, "toggleterm.nvim" } }, {}, function()
-	require 'toggleterm'.setup {
-		insert_mappings = true,
-		terminal_mappings = true,
-		direction = 'horizontal',
-		autochdir = true,
-		size = function(term)
-			if term.direction == "horizontal" then
-				return vim.o.lines
-			elseif term.direction == "vertical" then
-				return vim.o.columns * 0.5
-			end
-		end,
-		highlights = {
-			CursorLine = {},
-		},
-		winbar = {
-			enabled = false,
-			-- name_formatter = function(term)
-			--   -- log(term)
-			--   return term.name
-			-- end
-		}
 	}
 end)
 

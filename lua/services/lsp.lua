@@ -80,7 +80,7 @@ M.setup_servers = U.Service({ { FT.PLUGIN, 'mason.nvim' } }, function(lsp_server
 						},
 						completion = {
 							autopRequire = true,
-							displayContext = 5,
+			--				displayContext = 5,
 							keywordSnippet = "Replace",
 							callSnippet = "Replace",
 						},
