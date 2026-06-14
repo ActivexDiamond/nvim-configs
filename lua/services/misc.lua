@@ -411,6 +411,7 @@ end)
 
 --- conceals html classes
 M.conceal_html_classes = U.Service({}, function()
+--[==[
   local namespace = vim.api.nvim_create_namespace("class_conceal")
   local group = vim.api.nvim_create_augroup("class_conceal", { clear = true })
 
@@ -446,6 +447,7 @@ M.conceal_html_classes = U.Service({}, function()
       conceal_html_class(bufnr)
     end,
   })
+--]==]
 end)
 
 return M
