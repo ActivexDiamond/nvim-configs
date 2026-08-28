@@ -339,7 +339,8 @@ M.neo_tree = U.Service({ { FT.CONF, "neo-tree.nvim" } }, {}, function()
 					local skeleton_snips = require("services.skeleton_snips")
 					local snip = skeleton_snips.get_snippet_with_prompt(filetype or "all")
 					local str = skeleton_snips.expand(snip, path)
-					f:write(str)
+					--FIXME: Proper config for enablind/disabling skels for empty/blank files.
+					--f:write(str)
 					f:close()
 				end
 			},{
