@@ -285,8 +285,11 @@ M.setup_plugins = U.Service(function()
 	M.key { '<A-Up>', '<C-o><C-w>k', mode = 'i' }
 	M.key { '<A-Down>', '<C-o><C-w>j', mode = 'i' }
 
-	M.key { '<S-Up>', '<CMD>lua _scroll_current_buffer(-10)<CR>', mode = 'i n' }
-	M.key { '<S-Down>', '<CMD>lua _scroll_current_buffer(10)<CR>', mode = 'i n' }
+	--Quick scrolling.
+	M.key { '<S-Up>', '<CMD>lua _scroll_current_buffer(-5)<CR>', mode = 'i n' }
+	M.key { '<S-Down>', '<CMD>lua _scroll_current_buffer(5)<CR>', mode = 'i n' }
+	M.key { '<M-S-Up>', '<CMD>lua _scroll_current_buffer(-10)<CR>', mode = 'i n' }
+	M.key { '<M-S-Down>', '<CMD>lua _scroll_current_buffer(10)<CR>', mode = 'i n' }
 
 	-- mini.bufremove
 	M.key { '<A-c>', function() require 'mini.bufremove'.delete() end, mode = 'n x i' }
